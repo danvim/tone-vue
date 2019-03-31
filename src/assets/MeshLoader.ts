@@ -2,27 +2,42 @@ import {Euler, Geometry, GLTF, Material, Mesh, Object3D, Vector3} from 'three';
 import GLTFLoader from 'three-gltf-loader';
 import Materials from './Materials';
 
-interface ObjectPrepInfo {
+interface GLTFPrepInfo {
   name: string;
   done: (gltf: GLTF) => Object3D;
 }
 
-const MESHES_DIRECTORY: string = '/meshes/';
-const DEFAULT_GET_MESHES = (gltf: GLTF): Mesh[] => {
-  return (gltf.scene.children
-    .filter((child) => child instanceof Mesh) as Mesh[])
+/**
+ * Location of where to load the GLTFs from.
+ */
+const GLTFS_DIRECTORY: string = '/meshes/';
+
+/**
+ * Default method for populating an Object3D. This method loads all meshes under the GLTF. For PBR materials with names
+ * existing under the Materials module, they will be used instead of that from the GLTF.
+ *
+ * The models are scaled up 20 times, and set to cast and receive shadows.
+ * @param {GLTF} gltf The loaded GLTF file
+ * @return Mesh[] Mesh collection
+ */
+const DEFAULT_GET_MESHES = (gltf: GLTF): Mesh[] =>
+  (gltf.scene.children.filter((child) => child instanceof Mesh) as Mesh[])
     .map((childMesh: Mesh) => {
       const material = Materials.hasOwnProperty(childMesh.name) ? Materials[childMesh.name] : childMesh.material;
       const geometry = childMesh.geometry;
       const mesh = new Mesh(geometry, material);
       mesh.scale = new Vector3(20, 20, 20);
-      mesh.rotation = new Euler(Math.PI / 2, 0, 0);
+      mesh.rotation = new Euler(0, 0, 0);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       return mesh;
     });
-};
 
+/**
+ * Default method of constructing an Object3D from a loaded GLTF file.
+ * @param {GLTF} gltf The loaded GLTF file
+ * @return Object3D
+ */
 const DEFAULT_GET_OBJECT3D = (gltf: GLTF): Object3D => {
   const object3d = new Object3D();
   object3d.castShadow = true;
@@ -31,7 +46,11 @@ const DEFAULT_GET_OBJECT3D = (gltf: GLTF): Object3D => {
   object3d.add(...DEFAULT_GET_MESHES(gltf));
   return object3d;
 };
-const MESHES: ObjectPrepInfo[] = [
+
+/**
+ * Hardcoded meshes to be loaded from assets.
+ */
+const GLTFS: GLTFPrepInfo[] = [
   {
     name: 'pool',
     done: (gltf: GLTF) => {
@@ -70,14 +89,14 @@ export default class MeshLoader {
   private onProgressCallbacks: Array<(i: number) => void> = [];
 
   private constructor() {
-    this.loadingTotal = MESHES.length;
+    this.loadingTotal = GLTFS.length;
     this.loader = new GLTFLoader();
 
-    MESHES.forEach(({name, done}: ObjectPrepInfo) => {
+    GLTFS.forEach(({name, done}: GLTFPrepInfo) => {
       name = name.toUpperCase();
       const path = name + '.glb';
       this.loader.load(
-        MESHES_DIRECTORY + path,
+        GLTFS_DIRECTORY + path,
         (gltf: GLTF) => {
           this.gltfs[name] = gltf;
           this.objects[name] = done(gltf);

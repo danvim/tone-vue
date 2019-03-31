@@ -10,14 +10,11 @@
   import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
   import {TileInfo} from 'tone-core/dist/Tiles/Tile';
   import Materials from '@/assets/Materials';
-
-  // @ts-ignore
-  // noinspection TypeScriptCheckImport
-  import * as Vgl from 'vue-gl';
-  import {ExtrudeGeometry, ExtrudeGeometryOptions, Geometry, Material, Shape, Vector3} from 'three';
+  import {ExtrudeGeometry, ExtrudeGeometryOptions, Geometry, Material, MeshPhongMaterial, Shape, Vector3} from 'three';
   import {shapeHex} from '@/utils/shapes';
   import Axial from 'tone-core/dist/Coordinates/Axial';
   import {VglNamespace} from '@/utils/vglHelpers';
+  import {VglGroup, VglMesh, VglObject3d} from 'vue-gl';
 
   const TILE_SIZE: number = 20;
   const TILE_WIDTH: number = Math.sqrt(3) * TILE_SIZE;
@@ -31,12 +28,6 @@
     bevelSegments: 1,
     bevelThickness: 1,
   };
-
-  const {
-    VglGroup,
-    VglObject3d,
-    VglMesh,
-  } = Vgl;
 
   @Component({
     components: {
@@ -70,8 +61,8 @@
     }
 
     get position(): Vector3 {
-      const [x, y] = this.axial.toCartesian(TILE_SIZE).asArray;
-      return new Vector3(x, y, 0);
+      const [x, z] = this.axial.toCartesian(TILE_SIZE).asArray;
+      return new Vector3(x, 0, z);
     }
 
     get tileHeight(): number {
@@ -82,7 +73,7 @@
       return new ExtrudeGeometry(HEX_SHAPE, {
         ...DEFAULT_EXTRUSION_OPTIONS,
         depth: this.tileHeight,
-      });
+      }).rotateX(-Math.PI / 2);
     }
 
     get positionString(): string {
@@ -103,6 +94,7 @@
       }
 
       ns.materials.Dirt = Materials.Dirt;
+      (ns.materials.Dirt as MeshPhongMaterial).color.multiplyScalar(1 - (this.tileInfo.height || 0) / 10);
     }
   }
 </script>
