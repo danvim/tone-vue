@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import {Component, Prop, Vue} from 'vue-property-decorator';
-  import {TileInfo} from 'tone-core/dist/Tiles/Tile';
+  import {TileInfo} from 'tone-core/dist/lib';
 
   // @ts-ignore
   // noinspection TypeScriptCheckImport

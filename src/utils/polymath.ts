@@ -1,4 +1,4 @@
-import Cartesian from 'tone-core/dist/Coordinates/Cartesian';
+import Cartesian from 'tone-core/dist/lib/Coordinates/Cartesian';
 
 /**
  * @param cornerCount

@@ -2,7 +2,7 @@ import {LineBasicMaterial, Material, MeshPhongMaterial, Color} from 'three';
 
 const Dirt = new MeshPhongMaterial({
     color: new Color(0xDF6B4E),
-    shininess: 60,
+    shininess: 20,
     flatShading: true,
 });
 

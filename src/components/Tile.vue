@@ -1,25 +1,20 @@
 <template>
   <vgl-group :position="positionString" :cast-shadow="true" :receive-shadow="true" name="tile" ref="group">
     <vgl-object3d :cast-shadow="true" :receive-shadow="true" name="tile-obj">
-      <vgl-mesh :geometry="geometryName" :material="materialName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh"/>
+      <vgl-mesh :geometry="resourceName" :material="resourceName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh"/>
     </vgl-object3d>
   </vgl-group>
 </template>
 
 <script lang="ts">
   import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
-  import {TileInfo} from 'tone-core/dist/Tiles/Tile';
+  import {TileInfo, Axial, LEVEL_HEIGHT, TILE_SIZE} from 'tone-core/dist/lib';
   import Materials from '@/assets/Materials';
   import {ExtrudeGeometry, ExtrudeGeometryOptions, Geometry, Material, MeshPhongMaterial, Shape, Vector3} from 'three';
   import {shapeHex} from '@/utils/shapes';
-  import Axial from 'tone-core/dist/Coordinates/Axial';
   import {VglNamespace} from '@/utils/vglHelpers';
   import {VglGroup, VglMesh, VglObject3d} from 'vue-gl';
 
-  const TILE_SIZE: number = 20;
-  const TILE_WIDTH: number = Math.sqrt(3) * TILE_SIZE;
-  const TILE_HEIGHT: number = 2 * TILE_SIZE;
-  const LEVEL_HEIGHT: number = 5;
   const HEX_SHAPE: Shape = shapeHex(TILE_SIZE);
   const DEFAULT_EXTRUSION_OPTIONS: ExtrudeGeometryOptions = {
     steps: 1,
@@ -70,6 +65,10 @@
     }
 
     get geometry(): Geometry {
+      if (this.tileHeight === 0) {
+        return new Geometry();
+      }
+
       return new ExtrudeGeometry(HEX_SHAPE, {
         ...DEFAULT_EXTRUSION_OPTIONS,
         depth: this.tileHeight,
@@ -81,20 +80,20 @@
       return x + ' ' + y + ' ' + z;
     }
 
-    private get geometryName(): string {
+    private get resourceName(): string {
       return `tile${this.tileInfo.height}`;
     }
 
     private mounted() {
       const ns = this.$refs.group.vglNamespace;
 
-      if (ns.geometries[this.geometryName] === undefined) {
+      if (ns.geometries[this.resourceName] === undefined) {
         // Cache tile
-        ns.geometries[this.geometryName] = this.geometry;
-      }
+        ns.geometries[this.resourceName] = this.geometry;
 
-      ns.materials.Dirt = Materials.Dirt;
-      (ns.materials.Dirt as MeshPhongMaterial).color.multiplyScalar(1 - (this.tileInfo.height || 0) / 10);
+        const m = ns.materials[this.resourceName] = Materials.Dirt.clone();
+        (m as MeshPhongMaterial).color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2);
+      }
     }
   }
 </script>
