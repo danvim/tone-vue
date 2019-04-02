@@ -1,11 +1,10 @@
-import {PackageType} from 'tone-core/dist/lib';
-import {PackageType} from 'tone-core/dist/Protocol';
 <template>
   <div id="app">
     <game-renderer/>
     <div id="debug-panel" v-show="isShowingDebugInfo">
       <p>Peer ID: {{ peerInfo.id }}</p>
       <p>Connected: {{peerInfo.connections}}</p>
+      <button @click="startGame()">Start Game</button>
     </div>
   </div>
 </template>
@@ -57,6 +56,11 @@ import {PackageType} from 'tone-core/dist/Protocol';
 
     private destroyed() {
       window.removeEventListener('keypress', this.onWindowKeyUp);
+    }
+
+    private startGame() {
+      window.console.log('start game');
+      window.protocol.emit(PackageType.TRY_START_GAME, {});
     }
   }
 </script>

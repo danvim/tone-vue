@@ -20,7 +20,7 @@
     "three": "^0.101.1",
     "three-gltf-loader": "^1.103.0",
     "three-orbit-controls": "^82.1.0",
-    "tone-core": "git+https://github.com/danvim/tone-core.git#master",
+    "tone-core": "git+ssh://git@github.com/danvim/tone-core.git",
     "tsc-watch": "^2.1.2",
     "vue": "^2.6.6",
     "vue-class-component": "^6.0.0",
