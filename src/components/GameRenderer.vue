@@ -44,7 +44,7 @@ import {PackageType} from 'tone-core/dist/Protocol';
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { PackageType, Protocol, TileInfo } from "tone-core/lib";
+import { PackageType, Protocol, TileInfo } from "tone-core/dist/lib";
 import WorldMap from "@/components/WorldMap.vue";
 import MeshLoader from "@/assets/MeshLoader";
 import { Spherical, Vector3 } from "three";
@@ -175,10 +175,10 @@ export default class GameRenderer extends Vue {
         window.console.log(data);
       })
     );
-    // window.protocol.on(PackageType.UPDATE_TILES,(object, conn)=>{
-    //   window.console.log(object);
-    //   // this.map = {...this.map, ...object.tiles};
-    // })
+    window.protocol.on(PackageType.UPDATE_TILES,(object: any, conn: any)=>{
+      window.console.log(object);
+      this.map = {...this.map, ...object.tiles};
+    })
   }
 
   private mounted(): void {

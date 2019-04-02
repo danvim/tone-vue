@@ -2,7 +2,7 @@
  * Generates THREE.Shape
  */
 
-import Cartesian from 'tone-core/dist/lib/Coordinates/Cartesian';
+import {Cartesian} from 'tone-core/dist/lib/Coordinates';
 import {polygonCorner} from './polymath';
 import {Shape} from 'three';
 
