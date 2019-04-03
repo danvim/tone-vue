@@ -1,5 +1,5 @@
 import {Vue} from 'vue-property-decorator';
-import {Camera, Geometry, Material, Object3D, Scene, Spherical, Vector3} from 'three';
+import {Camera, Euler, Geometry, Material, Object3D, Quaternion, Scene, Spherical, Vector3} from 'three';
 
 export interface VglNamespace extends Vue {
   vglNamespace: {
@@ -12,6 +12,27 @@ export interface VglNamespace extends Vue {
 
 export interface VglRenderer extends Vue {
   sceneInst: Scene;
+}
+
+export interface VglObject3d extends Vue {
+  inst: Object3D;
+  position: Vector3;
+  rotation: Euler;
+  rotationQuaternion: Quaternion;
+  scale: Vector3;
+  castShadow: boolean;
+  receiveShadow: boolean;
+  name: string;
+  visible: {
+    type: boolean,
+    default: true,
+  };
+}
+
+export interface VglCamera extends VglObject3d {
+  inst: Camera;
+  orbitTarget: Vector3;
+  orbitPosition: Spherical;
 }
 
 export function v3(v: Vector3): string {

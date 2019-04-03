@@ -20,20 +20,20 @@ declare global {
   }
 }
 
-const protocol = ((window as any).protocol = new Protocol());
-const peer = ((window as any).peer = new Peer({
+const protocol = window.protocol = new Protocol();
+const peer = window.peer = new Peer({
   host: HOST,
   port: PORT,
   path: PEER_PATH,
-}));
+});
 
 const peerConn = window.peer.connect('server', { serialization: 'none' });
 
-peerConn.on('data', (data) => {
-  window.console.log('peerConn', data);
-});
-
 peerConn.on('open', () => {
+  window.console.log('Connection to server!');
+  peerConn.on('data', (data) => {
+    window.console.log('peerConn', data);
+  });
   protocol.add(peerConn);
   protocol.emit(PackageType.TRY_JOIN_LOBBY, { username: 'Daniel' });
 });
