@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
-import Peer from 'peerjs';
+import Peer, {DataConnection} from 'peerjs';
+import axios from 'axios';
 // @ts-ignore
 import Fragment from 'vue-fragment';
 
@@ -17,6 +18,7 @@ declare global {
   interface Window {
     protocol: Protocol;
     peer: Peer;
+    peerConn: DataConnection;
   }
 }
 
@@ -27,16 +29,7 @@ const peer = window.peer = new Peer({
   path: PEER_PATH,
 });
 
-const peerConn = window.peer.connect('server', { serialization: 'none' });
-
-peerConn.on('open', () => {
-  window.console.log('Connection to server!');
-  peerConn.on('data', (data) => {
-    window.console.log('peerConn', data);
-  });
-  protocol.add(peerConn);
-  protocol.emit(PackageType.TRY_JOIN_LOBBY, { username: 'Daniel' });
-});
+const peerConn = window.peerConn = window.peer.connect('server', { serialization: 'none' });
 
 new Vue({
   render: (h) => h(App),

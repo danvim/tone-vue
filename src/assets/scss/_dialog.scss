@@ -1,0 +1,32 @@
+@import "colors";
+
+.dialog {
+  background-color: $slate;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+  padding: 30px;
+  min-width: 400px;
+  border-radius: 10px;
+}
+
+@mixin dialog-color($color: $blue) {
+  box-shadow: 0 0 10px $color inset;
+  color: lighten($color, 35);
+  border: 3px solid $color;
+
+  h1 {
+    text-shadow: 0 0 10px $color;
+    color: lighten($color, 20);
+  }
+}
+
+.dialog-blue {
+  @include dialog-color($blue);
+}
+
+.dialog-red {
+  @include dialog-color($red);
+}
+
+.dialog-green {
+  @include dialog-color($green);
+}

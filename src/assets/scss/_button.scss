@@ -1,0 +1,32 @@
+@import "colors";
+
+.btn {
+  font-size: 20px;
+  padding: 10px 20px;
+  min-width: 150px;
+  border-radius: 3px;
+  transition: 0.2s all ease;
+}
+
+@mixin btn-color($color: $blue) {
+  background: linear-gradient(to bottom, darken($color, 15), darken($color, 40));
+  border: 0;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent inset, 0 0 0 3px transparentize($color, 0.5) inset;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  outline: none;
+
+  &:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 5px $color, 0 0 5px $color inset, 0 0 0 3px transparentize($color, 0.5) inset;
+  }
+
+  &:active {
+    filter: brightness(1.4);
+    box-shadow: 0 0 10px $color, 0 0 5px $color inset, 0 0 0 3px transparentize(lighten($color, 40), 0.5) inset;
+  }
+}
+
+.btn-blue {
+  @include btn-color($blue);
+}

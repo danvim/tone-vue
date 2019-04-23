@@ -10,10 +10,12 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/dat.gui": "^0.7.2",
     "@types/peerjs": "0.0.30",
     "@types/three": "^0.93.30",
     "acorn": "^6.1.1",
+    "axios": "^0.18.0",
     "dat.gui": "^0.7.6",
     "eslint": "^5.16.0",
     "peerjs": "^0.3.24",
