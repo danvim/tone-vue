@@ -14,6 +14,11 @@ table {
     padding: 15px;
     vertical-align: top;
     border-top: 1px solid $border-color;
+
+    &.active {
+      background-color: transparentize($blue, 0.8);
+      box-shadow: 0 -8px 14px -12px $blue inset;
+    }
   }
 
   thead th {

@@ -1,5 +1,5 @@
 export const rotatingFactor: number = 1 / 300;
-export const panningFactor: number = 1 / 600;
+export const panningFactor: number = 1 / 1100;
 export const pitchMin: number = Math.PI / 6;
 export const pitchMax: number = Math.PI * 9 / 20;
 export const zoomMin: number = 50;
