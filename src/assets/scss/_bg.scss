@@ -1,0 +1,15 @@
+.bg {
+  filter: blur(5px);
+  opacity: 0.4;
+}
+
+.bg-1 {
+  background: url(/images/bg_1.png) no-repeat;
+  background-position-x: 40%;
+}
+
+.bg-2 {
+  background: url(/images/bg_2.png) no-repeat;
+  background-position: bottom right;
+  background-size: cover;
+}

@@ -3,9 +3,9 @@
 input, input[type="text"] {
   font-size: 20px;
   padding: 10px;
-  background-color: lighten($slate, 10);
+  background-color: $lighter-slate;
   color: #ffffff;
-  border: 3px solid transparentize(lighten(desaturate($blue, 40), 20), 0.6);
+  border: 3px solid $border-color;
   border-radius: 3px;
   transition: 0.3s all ease;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1) inset;

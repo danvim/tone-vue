@@ -1,0 +1,14 @@
+// Fade
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.8s ease;
+}
+
+.fade-enter {
+  opacity: 0;
+  filter: blur(5px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  filter: brightness(1.5);
+}

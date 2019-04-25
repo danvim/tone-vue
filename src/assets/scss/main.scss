@@ -2,17 +2,10 @@
 @import "dialog";
 @import "button";
 @import "input";
-
-.fs {
-  display: flex;
-  position: absolute;
-  top:0;
-  left:0;
-  bottom:0;
-  right:0;
-  align-items: center;
-  justify-content: center;
-}
+@import "layouts";
+@import "bg";
+@import "tables";
+@import "transitions";
 
 @font-face {
   font-family: 'ropa';
@@ -27,11 +20,16 @@ html, body {
   margin:0;
   padding:0;
   overflow: hidden;
+  font-size: 16px;
 }
 
 * {
   box-sizing: border-box;
   font-family: ropa, sans-serif;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 canvas {
@@ -57,4 +55,9 @@ canvas {
 }
 .mr-0 {
   margin-right:0;
+}
+
+.heading {
+  color: lighten($blue, 40);
+  font-size: 50px;
 }

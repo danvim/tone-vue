@@ -1,0 +1,34 @@
+@import "colors";
+
+table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 30px;
+  background-color: $lighter-slate;
+  border-spacing: 0;
+  border-radius: 3px;
+  border: 3px solid $border-color;
+
+  th,
+  td {
+    padding: 15px;
+    vertical-align: top;
+    border-top: 1px solid $border-color;
+  }
+
+  thead th {
+    vertical-align: bottom;
+    border-bottom: 3px solid $border-color;
+    color: $blue;
+    text-shadow: 0 0 5px transparentize($blue, 0.4);
+    font-size: 20px;
+  }
+
+  tbody + tbody {
+    border-top: 3px solid $border-color;
+  }
+
+  table {
+    background-color: $lighter-slate;
+  }
+}

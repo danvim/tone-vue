@@ -2,3 +2,6 @@ $slate: #293b44;
 $blue: #13c2ff;
 $green: #17cf62;
 $red: #cf225b;
+
+$lighter-slate: lighten($slate, 10);
+$border-color: transparentize(lighten(desaturate($blue, 40), 20), 0.6)

@@ -1,16 +1,24 @@
 import {GameScreen} from './utils/GameScreen';
-import {PackageType} from 'tone-core/dist/lib';
 import {GameScreen} from './utils/GameScreen';
+import {PackageType} from 'tone-core/dist/lib';
+import {PackageType} from 'tone-core/dist/lib';
 <template>
   <div id="app">
-    <loading v-if="currentScreen === GameScreen.LOADING"/>
-    <login v-else-if="currentScreen === GameScreen.LOGIN"/>
-    <div v-else-if="currentScreen === GameScreen.LOBBY"></div>
-    <game-renderer v-else-if="currentScreen === GameScreen.GAME"/>
+    <transition name="fade" v-if="currentScreen === GameScreen.LOADING">
+      <loading/>
+    </transition>
+    <transition name="fade" v-else-if="currentScreen === GameScreen.LOGIN">
+      <login/>
+    </transition>
+    <transition name="fade" v-else-if="currentScreen === GameScreen.LOBBY">
+      <lobby/>
+    </transition>
+    <transition name="fade" v-else-if="currentScreen === GameScreen.GAME">
+      <game-renderer/>
+    </transition>
     <div id="debug-panel" v-show="isShowingDebugInfo">
       <p>Peer ID: {{ peerInfo.id }}</p>
       <p>Connected: {{peerInfo.connections}}</p>
-      <button @click="startGame()">Start Game</button>
     </div>
   </div>
 </template>
@@ -21,9 +29,10 @@ import {GameScreen} from './utils/GameScreen';
   import GameRenderer from '@/components/GameRenderer.vue';
   import Login from '@/components/Login.vue';
   import Loading from '@/components/Loading.vue';
+  import Lobby from '@/components/Lobby.vue';
   import * as THREE from 'three';
   import {namespace, State} from 'vuex-class';
-  import {PackageType, UpdateLobbyMessage} from 'tone-core/dist/lib';
+  import {PackageType, UpdateLobbyMessage, UpdateTilesMessage} from 'tone-core/dist/lib';
   import {HOST, PEER_PATH, PORT} from '@/configs/Server';
   import axios from 'axios';
   import {GameScreen} from '@/utils/GameScreen';
@@ -33,8 +42,11 @@ import {GameScreen} from './utils/GameScreen';
 
   const connections = namespace('connections');
 
+  const game = namespace('game');
+
   @Component({
     components: {
+      Lobby,
       Login,
       Loading,
       GameRenderer,
@@ -42,6 +54,9 @@ import {GameScreen} from './utils/GameScreen';
   })
   export default class App extends Vue {
     @State public version!: string;
+    @game.Mutation public addPlayer: any;
+    @game.Mutation public updateMap: any;
+
     public currentScreen: GameScreen = GameScreen.LOADING;
 
     public peerInfo: any = {
@@ -87,20 +102,38 @@ import {GameScreen} from './utils/GameScreen';
 
       window.addEventListener('keypress', this.onWindowKeyUp);
 
-      window.protocol.on(PackageType.UPDATE_LOBBY, (message, data) => {
+      this.setupProtocolListeners();
+    }
+
+    private setupProtocolListeners() {
+      const protocol = window.protocol;
+
+      protocol.on(PackageType.UPDATE_LOBBY, (message, data) => {
         const lobbyMessage = (message as UpdateLobbyMessage);
         window.console.log(lobbyMessage);
-        this.currentScreen = GameScreen.LOBBY;
+        if (this.currentScreen !== GameScreen.GAME) {
+          this.currentScreen = GameScreen.LOBBY;
+        }
+        this.addPlayer({
+          player: {
+            username: lobbyMessage.username,
+            playerId: lobbyMessage.playerId,
+            connId: lobbyMessage.connId,
+          },
+        });
+      });
+
+      protocol.on(PackageType.UPDATE_TILES, (message, data) => {
+        const tilesMessage = (message as UpdateTilesMessage);
+        this.currentScreen = GameScreen.GAME;
+        this.updateMap({
+          map: tilesMessage.tiles,
+        });
       });
     }
 
     private destroyed() {
       window.removeEventListener('keypress', this.onWindowKeyUp);
-    }
-
-    private startGame() {
-      window.console.log('start game');
-      window.protocol.emit(PackageType.TRY_START_GAME, {});
     }
   }
 </script>

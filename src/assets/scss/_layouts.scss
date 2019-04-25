@@ -1,0 +1,26 @@
+@import "colors";
+
+.fs {
+  display: flex;
+  position: fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-fs {
+  flex-direction: column;
+  h1 {
+    margin-top: 0;
+  }
+  background: linear-gradient(to bottom, darken($slate, 5), darken($slate, 15));
+}
+
+.center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

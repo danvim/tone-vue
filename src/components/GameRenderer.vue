@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fs">
     <vgl-namespace ref="vglNs">
       <vgl-scene name="scn">
         <vgl-hemisphere-light
@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { PackageType, Protocol, TileInfo } from 'tone-core/dist/lib';
+import {PackageType, Protocol, TileInfo, TileMap} from 'tone-core/dist/lib';
 import WorldMap from '@/components/WorldMap.vue';
 import MeshLoader from '@/assets/MeshLoader';
 import {
@@ -103,6 +103,8 @@ import { DataConnection } from 'peerjs';
 
 const connections = namespace('connections');
 
+const game = namespace('game');
+
 @Component({
   components: {
     VglHemisphereLight,
@@ -121,7 +123,7 @@ const connections = namespace('connections');
   },
 })
 export default class GameRenderer extends Vue {
-  public map: { [k in string]: TileInfo } = {};
+  @game.State public map!: TileMap;
   public cameraDistance: number = 200;
   public cameraTheta: number = 0;
   public cameraPhi: number = Math.PI / 4;
@@ -205,18 +207,6 @@ export default class GameRenderer extends Vue {
     );
   }
 
-  private setupConnectionListeners(): void {
-    window.protocol.conns.forEach((conn: DataConnection) =>
-      conn.on('data', (data) => {
-        window.console.log(data);
-      }),
-    );
-    window.protocol.on(PackageType.UPDATE_TILES, (object: any, conn: any) => {
-      window.console.log(object);
-      this.map = {...this.map, ...object.tiles};
-    });
-  }
-
   private setupThreeInjection() {
     // @ts-ignore
     // noinspection TypeScriptUnresolvedVariable
@@ -270,8 +260,6 @@ export default class GameRenderer extends Vue {
     this.setupThreeInjection();
 
     this.setupGUI();
-
-    this.setupConnectionListeners();
   }
 
   private destroyed(): void {
