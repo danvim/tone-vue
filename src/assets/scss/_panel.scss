@@ -1,0 +1,32 @@
+@import "colors";
+
+.panel {
+  background-color: $slate;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+  padding: 30px;
+  min-width: 400px;
+  border-radius: 10px;
+}
+
+@mixin panel-color($color: $blue) {
+  box-shadow: 0 0 10px $color inset;
+  color: lighten($color, 35);
+  border: 3px solid $color;
+
+  h1 {
+    text-shadow: 0 0 10px $color;
+    color: lighten($color, 20);
+  }
+}
+
+.panel-blue {
+  @include panel-color($blue);
+}
+
+.panel-red {
+  @include panel-color($red);
+}
+
+.panel-green {
+  @include panel-color($green);
+}

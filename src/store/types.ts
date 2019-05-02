@@ -9,6 +9,9 @@ export interface RootState {
 export interface GameState {
   players: Player[];
   map: TileMap;
+  ic: number;
+  workerPop: number;
+  totalPop: number;
 }
 
 export interface GameMutation extends MutationTree<GameState> {

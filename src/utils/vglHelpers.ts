@@ -12,9 +12,10 @@ export interface VglNamespace extends Vue {
 
 export interface VglRenderer extends Vue {
   sceneInst: Scene;
+  render(): void;
 }
 
-export interface VglObject3d extends Vue {
+export interface VglObject3d extends VglNamespace {
   inst: Object3D;
   position: Vector3;
   rotation: Euler;

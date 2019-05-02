@@ -81,9 +81,6 @@ import {PackageType} from 'tone-core/dist/lib';
         .then(() => {
           peerConn.on('open', () => {
             window.console.log('Connection to server!');
-            peerConn.on('data', (data) => {
-              window.console.log('peerConn', data);
-            });
             protocol.add(peerConn);
             this.currentScreen = GameScreen.LOGIN;
           });
@@ -111,7 +108,7 @@ import {PackageType} from 'tone-core/dist/lib';
       protocol.on(PackageType.UPDATE_LOBBY, (message, data) => {
         const lobbyMessage = (message as UpdateLobbyMessage);
         window.console.log(lobbyMessage);
-        if (this.currentScreen !== GameScreen.GAME) {
+        if (this.currentScreen !== GameScreen.GAME && lobbyMessage.connId === window.peer.id) {
           this.currentScreen = GameScreen.LOBBY;
         }
         this.addPlayer({

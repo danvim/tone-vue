@@ -1,0 +1,113 @@
+@import "font_variables";
+
+@font-face {
+  font-family: '#{$font-family}';
+  src:
+    url('/#{$font-path}/#{$font-family}.ttf?nn5b0w') format('truetype'),
+    url('/#{$font-path}/#{$font-family}.woff?nn5b0w') format('woff'),
+    url('/#{$font-path}/#{$font-family}.svg?nn5b0w##{$font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$font-family}' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tone-priority {
+  &:before {
+    content: $tone-priority;
+  }
+}
+.tone-shield {
+  &:before {
+    content: $tone-shield;
+  }
+}
+.tone-skull {
+  &:before {
+    content: $tone-skull;
+  }
+}
+.tone-skull-spike {
+  &:before {
+    content: $tone-skull-spike;
+  }
+}
+.tone-slow {
+  &:before {
+    content: $tone-slow;
+  }
+}
+.tone-struct {
+  &:before {
+    content: $tone-struct;
+  }
+}
+.tone-sword {
+  &:before {
+    content: $tone-sword;
+  }
+}
+.tone-training {
+  &:before {
+    content: $tone-training;
+  }
+}
+.tone-worker {
+  &:before {
+    content: $tone-worker;
+  }
+}
+.tone-ai {
+  &:before {
+    content: $tone-ai;
+  }
+}
+.tone-build {
+  &:before {
+    content: $tone-build;
+  }
+}
+.tone-building {
+  &:before {
+    content: $tone-building;
+  }
+}
+.tone-fast {
+  &:before {
+    content: $tone-fast;
+  }
+}
+.tone-ic {
+  &:before {
+    content: $tone-ic;
+  }
+}
+.tone-normal {
+  &:before {
+    content: $tone-normal;
+  }
+}
+.tone-pause {
+  &:before {
+    content: $tone-pause;
+  }
+}
+.tone-prime {
+  &:before {
+    content: $tone-prime;
+  }
+}
+

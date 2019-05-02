@@ -2,6 +2,10 @@ $slate: #293b44;
 $blue: #13c2ff;
 $green: #17cf62;
 $red: #cf225b;
+$yellow: #f3e012;
 
+$faded-blue: desaturate($blue, 70);
+$darker-faded-blue: darken($faded-blue, 20);
 $lighter-slate: lighten($slate, 10);
+$lightest-slate: desaturate(lighten($slate, 60), 10);
 $border-color: transparentize(lighten(desaturate($blue, 40), 20), 0.6)

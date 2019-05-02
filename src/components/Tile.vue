@@ -1,7 +1,7 @@
 <template>
   <vgl-group :position="positionString" :cast-shadow="true" :receive-shadow="true" name="tile" ref="group">
-    <vgl-object3d :cast-shadow="true" :receive-shadow="true" name="tile-obj">
-      <vgl-mesh :geometry="resourceName" :material="resourceName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh"/>
+    <vgl-object3d :cast-shadow="true" :receive-shadow="true" name="tile-obj" ref="tileObj">
+      <vgl-mesh :geometry="resourceName" :material="heightName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh"/>
     </vgl-object3d>
   </vgl-group>
 </template>
@@ -10,10 +10,21 @@
   import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
   import {TileInfo, Axial, LEVEL_HEIGHT, TILE_SIZE} from 'tone-core/dist/lib';
   import Materials from '@/assets/Materials';
-  import {ExtrudeGeometry, ExtrudeGeometryOptions, Geometry, Material, MeshPhongMaterial, Shape, Vector3} from 'three';
+  import {
+    Color,
+    ExtrudeGeometry,
+    ExtrudeGeometryOptions,
+    Geometry, Group,
+    Material,
+    MeshPhongMaterial,
+    Object3D,
+    Shape,
+    Vector3,
+  } from 'three';
   import {shapeHex} from '@/utils/shapes';
-  import {VglNamespace} from '@/utils/vglHelpers';
+  import {VglNamespace, VglObject3d as VglObject3dX} from '@/utils/vglHelpers';
   import {VglGroup, VglMesh, VglObject3d} from 'vue-gl';
+  import {closest} from '@/utils/threeHelper';
 
   const HEX_SHAPE: Shape = shapeHex(TILE_SIZE);
   const DEFAULT_EXTRUSION_OPTIONS: ExtrudeGeometryOptions = {
@@ -34,12 +45,51 @@
   export default class Tile extends Vue {
     @Prop() public axialCoords!: string;
     @Prop() public tileInfo!: TileInfo;
+    public hovering: boolean = false;
+    public selected: boolean = false;
 
     public materialName: string = 'Dirt';
 
     public $refs!: {
-      group: VglNamespace,
+      group: VglObject3dX,
+      tileObj: VglObject3dX,
     };
+
+    /**
+     * Check if this tile is selected from the broadcast object and update i
+     * @param group
+     */
+    public hover(group: Group): void {
+      const target = closest(group, 'tile');
+      if (target !== null && target === this.$refs.group.inst) {
+        // this object is selected
+        this.hovering = true;
+      }
+    }
+
+    public activate(): void {
+      if (this.hovering) {
+        this.selected = true;
+      }
+    }
+
+    /**
+     * Remove hover
+     */
+    public offHover() {
+      if (this.hovering) {
+        this.hovering = false;
+      }
+    }
+
+    /**
+     * Remove selection
+     */
+    public deselect() {
+      if (this.selected) {
+        this.selected = false;
+      }
+    }
 
     @Watch('tileInfo', {immediate: true, deep: true})
     private onTileInfoUpdate(n: TileInfo, o: TileInfo = {type: 0, height: 0}) {
@@ -51,20 +101,20 @@
       }
     }
 
-    get axial(): Axial {
+    public get axial(): Axial {
       return Axial.fromString(this.axialCoords);
     }
 
-    get position(): Vector3 {
+    public get position(): Vector3 {
       const [x, z] = this.axial.toCartesian(TILE_SIZE).asArray;
       return new Vector3(x, 0, z);
     }
 
-    get tileHeight(): number {
+    public get tileHeight(): number {
       return (this.tileInfo.height || 0) * LEVEL_HEIGHT;
     }
 
-    get geometry(): Geometry {
+    public get geometry(): Geometry {
       if (this.tileHeight === 0) {
         return new Geometry();
       }
@@ -75,24 +125,42 @@
       }).rotateX(-Math.PI / 2);
     }
 
-    get positionString(): string {
+    public get positionString(): string {
       const {x, y, z} = this.position;
       return x + ' ' + y + ' ' + z;
     }
 
+    public get tileObject(): Object3D {
+      return this.$refs.tileObj.inst;
+    }
+
+    public get tileGroup(): Object3D {
+      return this.$refs.group.inst;
+    }
+
     private get resourceName(): string {
-      return `tile${this.tileInfo.height}`;
+      return `tile${this.axialCoords}`;
+    }
+
+    private get heightName(): string {
+      return `tile${this.tileInfo.height + (this.selected ? 'b' : this.hovering ? 'a' : '')}`;
     }
 
     private mounted() {
       const ns = this.$refs.group.vglNamespace;
 
+      this.$refs.group.inst.name = 'tile';
+
       if (ns.geometries[this.resourceName] === undefined) {
         // Cache tile
         ns.geometries[this.resourceName] = this.geometry;
 
-        const m = ns.materials[this.resourceName] = Materials.Dirt.clone();
-        (m as MeshPhongMaterial).color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2);
+        const m = ns.materials[this.heightName] = Materials.Dirt.clone() as MeshPhongMaterial;
+        const ma = ns.materials[this.heightName + 'a'] = m.clone();
+        const mb = ns.materials[this.heightName + 'b'] = m.clone();
+        m.color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2);
+        ma.color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2).add(new Color(0.05, 0.05, 0.05));
+        mb.color = new Color(1, 1, 1);
       }
     }
   }

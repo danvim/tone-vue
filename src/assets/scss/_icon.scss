@@ -1,0 +1,14 @@
+@import "colors";
+
+@mixin icon-color($color: $blue) {
+  color: lighten($color, 20);
+  text-shadow: 0 0 3px $color;
+}
+
+i.blue {
+  @include icon-color($blue);
+}
+
+i.yellow {
+  @include icon-color($yellow);
+}

@@ -7,6 +7,9 @@ import {TileMap} from 'tone-core/dist/lib';
 export const state: GameState = {
   map: {},
   players: [],
+  ic: 0,
+  workerPop: 0,
+  totalPop: 0,
 };
 
 export const mutations: GameMutation = {
