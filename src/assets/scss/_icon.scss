@@ -9,6 +9,38 @@ i.blue {
   @include icon-color($blue);
 }
 
+i.green {
+  @include icon-color($green);
+}
+
 i.yellow {
   @include icon-color($yellow);
+}
+
+i.red {
+  @include icon-color($red);
+}
+
+i.light {
+  @include icon-color($lightest-slate);
+}
+
+
+
+// Icon Button
+
+.icon-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  padding: 5px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.icon-button-wrapper {
+  display: block;
 }

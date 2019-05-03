@@ -11,7 +11,7 @@
   // @ts-ignore
   // noinspection TypeScriptCheckImport
   import * as Vgl from 'vue-gl';
-  import Tile from '@/components/Tile.vue';
+  import Tile from '@/components/Game/Tile.vue';
   import {Object3D} from 'three';
 
   const {

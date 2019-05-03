@@ -35,6 +35,9 @@
     bevelThickness: 1,
   };
 
+  /**
+   * This component denotes a single tile given the TileInfo and Axial coordinates that associates with it.
+   */
   @Component({
     components: {
       VglGroup,

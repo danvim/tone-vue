@@ -1,15 +1,43 @@
 <template>
   <div id="side-bar">
-    <div class="bar"><p>s</p><p>s</p><p>s</p><p>s</p></div>
-    <div class="bar"><p>s</p><p>s</p></div>
+    <div class="bar">
+      <icon-button icon-class="green tone-base" text="Base"/>
+      <icon-button icon-class="light tone-barrack" text="Barrack"/>
+      <icon-button icon-class="light tone-barrack" text="Barrack"/>
+      <icon-button icon-class="light tone-barrack" text="Barrack"/>
+    </div>
+    <div class="bar">
+      <icon-button icon-class="red tone-berserk" text="All-Out Attack"/>
+      <icon-button icon-class="yellow tone-job" text="Jobs"/>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import {Component, Prop, Vue} from 'vue-property-decorator';
+  import IconButton from '@/components/UI/IconButton.vue';
+  // tslint:disable-next-line
+  const Popper = require('vue-popperjs');
 
-  @Component({})
+
+  /**
+   * This component carries the shortcuts to buildings and workers commands, including all-out attack and schedules.
+   */
+  @Component({
+    components: {
+      IconButton,
+      popper: Popper,
+    }
+  })
   export default class SideBar extends Vue {
+    private popperOptions = {
+      placement: 'right',
+      modifiers: {
+        preventOverflow: {
+          boundariesElement: 'viewport',
+        },
+      },
+    };
   }
 </script>
 

@@ -22,6 +22,7 @@ import {PackageType} from 'tone-core/dist/lib';
           :intensity="1"
         />
         <world-map :map="map" ref="worldMap"/>
+        <entity v-for="entityInfo in entityInfos" :entity-info="entityInfo"/>
       </vgl-scene>
       <div
         @mousedown.middle.prevent="isCameraRotating = true"
@@ -51,13 +52,13 @@ import {PackageType} from 'tone-core/dist/lib';
       <side-bar/>
       <div id="mini-map-panel" class="panel">
         <div class="resources">
-          <popper :options="popperOptions" :delay-on-mouse-over="500">
+          <popper :options="popperOptions" :delay-on-mouse-over="500" :append-to-body="true">
             <div class="popper">
               Information Capacity
             </div>
             <div class="resource" slot="reference"><i class="blue tone-ic"></i> <span class="resource-text">{{ic}}</span></div>
           </popper>
-          <popper :options="popperOptions" :delay-on-mouse-over="500">
+          <popper :options="popperOptions" :delay-on-mouse-over="500" :append-to-body="true">
             <div class="popper">
               Workers Population
             </div>
@@ -126,6 +127,8 @@ import {PackageType} from 'tone-core/dist/lib';
   import {namespace} from 'vuex-class/lib/bindings';
   import {gamePopperOptions} from '@/utils/uiHelper';
   import SideBar from '@/components/SideBar.vue';
+  import Entity from '@/components/Game/Entity.vue';
+  import EntityInfo from '@/game/EntityInfo';
   // tslint:disable-next-line
   const Popper = require('vue-popperjs');
 
@@ -135,6 +138,7 @@ import {PackageType} from 'tone-core/dist/lib';
 
   @Component({
     components: {
+      Entity,
       SideBar,
       VglHemisphereLight,
       VglOrthographicCamera,
@@ -157,6 +161,8 @@ import {PackageType} from 'tone-core/dist/lib';
     @game.State public ic!: number;
     @game.State public workerPop!: number;
     @game.State public totalPop!: number;
+    @game.State public entityInfos!: EntityInfo[];
+
     public cameraDistance: number = 200;
     public cameraTheta: number = 0;
     public cameraPhi: number = Math.PI / 4;

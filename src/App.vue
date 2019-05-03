@@ -1,3 +1,4 @@
+import {PackageType} from 'tone-core/dist/lib';
 import {GameScreen} from './utils/GameScreen';
 import {GameScreen} from './utils/GameScreen';
 import {PackageType} from 'tone-core/dist/lib';
@@ -32,7 +33,13 @@ import {PackageType} from 'tone-core/dist/lib';
   import Lobby from '@/components/Lobby.vue';
   import * as THREE from 'three';
   import {namespace, State} from 'vuex-class';
-  import {PackageType, UpdateLobbyMessage, UpdateTilesMessage} from 'tone-core/dist/lib';
+  import {
+    MoveEntityMessage,
+    PackageType,
+    SpawnEntityMessage,
+    UpdateLobbyMessage,
+    UpdateTilesMessage
+  } from 'tone-core/dist/lib';
   import {HOST, PEER_PATH, PORT} from '@/configs/Server';
   import axios from 'axios';
   import {GameScreen} from '@/utils/GameScreen';
@@ -56,6 +63,8 @@ import {PackageType} from 'tone-core/dist/lib';
     @State public version!: string;
     @game.Mutation public addPlayer: any;
     @game.Mutation public updateMap: any;
+    @game.Action public spawnEntity: any;
+    @game.Action public moveEntity: any;
 
     public currentScreen: GameScreen = GameScreen.LOADING;
 
@@ -106,7 +115,7 @@ import {PackageType} from 'tone-core/dist/lib';
       const protocol = window.protocol;
 
       protocol.on(PackageType.UPDATE_LOBBY, (message, data) => {
-        const lobbyMessage = (message as UpdateLobbyMessage);
+        const lobbyMessage = message as UpdateLobbyMessage;
         window.console.log(lobbyMessage);
         if (this.currentScreen !== GameScreen.GAME && lobbyMessage.connId === window.peer.id) {
           this.currentScreen = GameScreen.LOBBY;
@@ -121,11 +130,21 @@ import {PackageType} from 'tone-core/dist/lib';
       });
 
       protocol.on(PackageType.UPDATE_TILES, (message, data) => {
-        const tilesMessage = (message as UpdateTilesMessage);
+        const tilesMessage = message as UpdateTilesMessage;
         this.currentScreen = GameScreen.GAME;
         this.updateMap({
           map: tilesMessage.tiles,
         });
+      });
+
+      protocol.on(PackageType.SPAWN_ENTITY, (message, data) => {
+        const spawnEntityMessage = message as SpawnEntityMessage;
+        this.spawnEntity({message: spawnEntityMessage});
+      });
+
+      protocol.on(PackageType.MOVE_ENTITY, (message, data) => {
+        const moveEntityMessage = message as MoveEntityMessage;
+        this.spawnEntity({message: moveEntityMessage});
       });
     }
 
@@ -138,6 +157,7 @@ import {PackageType} from 'tone-core/dist/lib';
 <style lang="scss">
   #debug-panel {
     position:absolute;
+    display: none;
     top:0;
     left:0;
     height: 200px;
