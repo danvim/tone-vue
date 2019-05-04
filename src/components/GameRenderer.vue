@@ -22,7 +22,7 @@ import {PackageType} from 'tone-core/dist/lib';
           :intensity="1"
         />
         <world-map :map="map" ref="worldMap"/>
-        <entity v-for="entityInfo in entityInfos" :entity-info="entityInfo"/>
+        <entities/>
       </vgl-scene>
       <div
         @mousedown.middle.prevent="isCameraRotating = true"
@@ -127,8 +127,7 @@ import {PackageType} from 'tone-core/dist/lib';
   import {namespace} from 'vuex-class/lib/bindings';
   import {gamePopperOptions} from '@/utils/uiHelper';
   import SideBar from '@/components/SideBar.vue';
-  import Entity from '@/components/Game/Entity.vue';
-  import EntityInfo from '@/game/EntityInfo';
+  import Entities from '@/components/Game/Entities.vue';
   // tslint:disable-next-line
   const Popper = require('vue-popperjs');
 
@@ -138,7 +137,7 @@ import {PackageType} from 'tone-core/dist/lib';
 
   @Component({
     components: {
-      Entity,
+      Entities,
       SideBar,
       VglHemisphereLight,
       VglOrthographicCamera,
@@ -161,7 +160,6 @@ import {PackageType} from 'tone-core/dist/lib';
     @game.State public ic!: number;
     @game.State public workerPop!: number;
     @game.State public totalPop!: number;
-    @game.State public entityInfos!: EntityInfo[];
 
     public cameraDistance: number = 200;
     public cameraTheta: number = 0;
@@ -189,6 +187,7 @@ import {PackageType} from 'tone-core/dist/lib';
     private v3 = v3;
     private s3 = s3;
     private popperOptions = gamePopperOptions;
+    private willRender = true;
 
     private ns: VglNamespaceX = this.$refs.vglNs;
 
@@ -226,15 +225,12 @@ import {PackageType} from 'tone-core/dist/lib';
       // Test ray casting
       this.raycaster.setFromCamera(mousePos, this.$refs.mainCamera.inst);
       // const intersects: Intersection[] = this.raycaster.intersectObjects(this.$refs.renderer.sceneInst.children, true);
-      const intersects: Intersection[] = this.raycaster.intersectObjects((this.$refs.worldMap as any).tileObjects, true);
+      const intersects: Intersection[] = this.raycaster.intersectObjects((this.$refs.worldMap as any).tileMeshes);
 
       (this.$refs.worldMap as any).broadcastOffHover();
-      const intersectMeshes = intersects.filter((intersect) => intersect.object.type === 'Mesh');
-      if (intersectMeshes.length > 0) {
-        (this.$refs.worldMap as any).broadcastHover(intersectMeshes[0].object);
+      if (intersects.length > 0) {
+        (this.$refs.worldMap as any).broadcastHover(intersects[0].object);
       }
-
-      this.$refs.renderer.render();
     }
 
     private onClick(): void {
@@ -313,10 +309,11 @@ import {PackageType} from 'tone-core/dist/lib';
       miniMap.layers.enable(M_LIGHT_LAYER);
     }
 
-    private setupProtocolListeners() {
-      window.protocol.on(PackageType.MOVE_ENTITY, (message, data) => {
-        //
-      });
+    private renderGame() {
+      this.$refs.renderer.render();
+      if (this.willRender) {
+        requestAnimationFrame(this.renderGame);
+      }
     }
 
     private mounted(): void {
@@ -332,13 +329,15 @@ import {PackageType} from 'tone-core/dist/lib';
       );
 
       this.setupThreeInjection();
-      this.setupProtocolListeners();
       this.setupGUI();
+
+      this.renderGame();
     }
 
     private destroyed(): void {
       window.removeEventListener('resize', this.updateWindowDimensions);
       this.datGUI.destroy();
+      this.willRender = false;
     }
   }
 </script>

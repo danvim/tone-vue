@@ -8,20 +8,22 @@ import Materials from '@/assets/Materials';
  *
  * The models are scaled up 20 times, and set to cast and receive shadows.
  * @param {GLTF} gltf The loaded GLTF file
- * @return Mesh[] Mesh collection
+ * @return Object3D[] Object3D collection
  */
-const DEFAULT_GET_MESHES = (gltf: GLTF): Mesh[] =>
-  (gltf.scene.children.filter((child) => child instanceof Mesh) as Mesh[])
-    .map((childMesh: Mesh) => {
-      const material = Materials.hasOwnProperty(childMesh.name) ? Materials[childMesh.name] : childMesh.material;
-      const geometry = childMesh.geometry;
-      const mesh = new Mesh(geometry, material);
-      mesh.scale = new Vector3(20, 20, 20);
-      mesh.rotation = new Euler(0, 0, 0);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      return mesh;
-    });
+const DEFAULT_GET_MESHES = (gltf: GLTF): Object3D[] => {
+  // (gltf.scene.children.filter((child) => child instanceof Mesh) as Mesh[])
+  //   .map((childMesh: Mesh) => {
+  //     const material = Materials.hasOwnProperty(childMesh.name) ? Materials[childMesh.name] : childMesh.material;
+  //     const geometry = childMesh.geometry;
+  //     const mesh = new Mesh(geometry, material);
+  //     mesh.scale = new Vector3(20, 20, 20);
+  //     mesh.rotation = new Euler(0, 0, 0);
+  //     mesh.castShadow = true;
+  //     mesh.receiveShadow = true;
+  //     return mesh;
+  //   });
+  return gltf.scene.children;
+};
 
 /**
  * Default method of constructing an Object3D from a loaded GLTF file.
@@ -33,6 +35,7 @@ export const DEFAULT_GET_OBJECT3D = (gltf: GLTF): Object3D => {
   object3d.castShadow = true;
   object3d.receiveShadow = true;
   object3d.name = 'unnamed-object';
-  object3d.add(...DEFAULT_GET_MESHES(gltf));
+  const allMeshes = DEFAULT_GET_MESHES(gltf);
+  object3d.add(...allMeshes);
   return object3d;
 };

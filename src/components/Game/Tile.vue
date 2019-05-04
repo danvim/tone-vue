@@ -1,7 +1,7 @@
 <template>
   <vgl-group :position="positionString" :cast-shadow="true" :receive-shadow="true" name="tile" ref="group">
     <vgl-object3d :cast-shadow="true" :receive-shadow="true" name="tile-obj" ref="tileObj">
-      <vgl-mesh :geometry="resourceName" :material="heightName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh"/>
+      <vgl-mesh :geometry="resourceName" :material="heightName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh" ref="tileMesh"/>
     </vgl-object3d>
   </vgl-group>
 </template>
@@ -15,7 +15,7 @@
     ExtrudeGeometry,
     ExtrudeGeometryOptions,
     Geometry, Group,
-    Material,
+    Material, Mesh,
     MeshPhongMaterial,
     Object3D,
     Shape,
@@ -56,6 +56,7 @@
     public $refs!: {
       group: VglObject3dX,
       tileObj: VglObject3dX,
+      tileMesh: VglObject3dX
     };
 
     /**
@@ -139,6 +140,10 @@
 
     public get tileGroup(): Object3D {
       return this.$refs.group.inst;
+    }
+
+    public get tileMesh(): Object3D {
+      return this.$refs.tileMesh.inst;
     }
 
     private get resourceName(): string {

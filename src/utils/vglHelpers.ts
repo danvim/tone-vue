@@ -1,13 +1,15 @@
 import {Vue} from 'vue-property-decorator';
 import {Camera, Euler, Geometry, Material, Object3D, Quaternion, Scene, Spherical, Vector3} from 'three';
 
+export interface Namespace {
+  object3ds: {[k in string]: Object3D};
+  materials: {[k in string]: Material};
+  geometries: {[k in string]: Geometry};
+  cameras: {[k in string]: Camera};
+}
+
 export interface VglNamespace extends Vue {
-  vglNamespace: {
-    object3ds: {[k in string]: Object3D},
-    materials: {[k in string]: Material},
-    geometries: {[k in string]: Geometry},
-    cameras: {[k in string]: Camera},
-  };
+  vglNamespace: Namespace;
 }
 
 export interface VglRenderer extends Vue {
@@ -36,7 +38,7 @@ export interface VglCamera extends VglObject3d {
   orbitPosition: Spherical;
 }
 
-export function v3(v: Vector3): string {
+export function v3(v: Vector3|Euler): string {
   return v.x + ' ' + v.y + ' ' + v.z;
 }
 

@@ -144,7 +144,7 @@ import {PackageType} from 'tone-core/dist/lib';
 
       protocol.on(PackageType.MOVE_ENTITY, (message, data) => {
         const moveEntityMessage = message as MoveEntityMessage;
-        this.spawnEntity({message: moveEntityMessage});
+        this.moveEntity({message: moveEntityMessage});
       });
     }
 

@@ -42,7 +42,8 @@ export const mutations: GameMutation = {
     } else {
       // Update each property individually
       const t = s.entityInfos[uid];
-      t.nextLocRot.position.set(locRot.position.x, locRot.position.y, locRot.position.z);
+      t.nextLocRot.position = locRot.position;
+      t.nextLocRot.rotation = locRot.rotation;
     }
   },
 };
@@ -64,7 +65,7 @@ export const actions: GameAction = {
       playerId: message.playerId,
       locRot: {
         position: new Vector3(message.position.x, message.position.y, message.position.z),
-        rotation: new Euler(1, 0, 0),
+        rotation: new Euler(0, 0, 0),
       },
     });
   },
@@ -74,4 +75,5 @@ export const game: Module<GameState, RootState> = {
   namespaced: true,
   state,
   mutations,
+  actions,
 };

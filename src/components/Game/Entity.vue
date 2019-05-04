@@ -1,7 +1,5 @@
 <template>
-  <vgl-object3d :cast-shadow="true" :receive-shadow="true" name="tile-obj" ref="tileObj">
-    <vgl-mesh :geometry="resourceName" :material="heightName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh"/>
-  </vgl-object3d>
+  <model :model="entityInfo.model" :accent="accent" :position="v3(entityInfo.nextLocRot.position)" :rotation="v3(entityInfo.nextLocRot.rotation)"/>
 </template>
 
 <script lang="ts">
@@ -9,15 +7,25 @@
   import EntityInfo from '@/game/EntityInfo';
   import {VglMesh, VglObject3d} from 'vue-gl';
   import MeshLoader from '@/assets/MeshLoader';
+  import Model from '@/components/Utils/Model.vue';
+  import {ACCENTS} from '@/configs/Players';
+  import {v3} from '@/utils/vglHelpers';
 
   @Component({
     components: {
+      Model,
       VglObject3d,
       VglMesh,
     }
   })
   export default class Entity extends Vue {
     @Prop() entityInfo!: EntityInfo;
+
+    private v3 = v3;
+
+    public get accent() {
+      return ACCENTS[this.entityInfo.playerId];
+    }
 
     private created() {
       const meshLoader = MeshLoader.getInstance();

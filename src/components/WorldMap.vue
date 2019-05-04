@@ -39,6 +39,10 @@
       return this.$refs.tiles.map((tileV: any) => tileV.tileObject);
     }
 
+    public get tileMeshes(): Object3D[] {
+      return this.$refs.tiles.map((tileV: any) => tileV.tileMesh);
+    }
+
     public broadcastHover(group: Object3D): void {
       this.$refs.tiles.forEach((tile: any) => tile.hover(group));
     }
