@@ -1,5 +1,6 @@
-import {GLTF, Object3D, Vector3} from 'three';
+import {Object3D, Vector3} from 'vue-gl/node_modules/three';
 import {DEFAULT_GET_OBJECT3D} from '@/utils/GLTF';
+import {GLTF} from 'vue-gl/node_modules/three/examples/jsm/loaders/GLTFLoader';
 
 /**
  * Location of where to load the GLTFs from.
@@ -17,13 +18,7 @@ export interface GLTFPrepInfo {
 export const GLTFS: GLTFPrepInfo[] = [
   {
     name: 'pool',
-    done: (gltf: GLTF) => {
-      const object3d = DEFAULT_GET_OBJECT3D(gltf);
-      object3d.position = new Vector3(0, 0, 1);
-      object3d.scale = new Vector3(0.9, 0.9, 0.9);
-      object3d.name = 'pool-object';
-      return object3d;
-    },
+    done: DEFAULT_GET_OBJECT3D,
   },
   {
     name: 'hall',

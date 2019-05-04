@@ -5,13 +5,13 @@
 <script lang="ts">
   import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
   import {VglObject3d} from 'vue-gl';
-  import {BoxGeometry, Color, Mesh, MeshPhongMaterial, Object3D} from 'three';
+  import {BoxGeometry, Color, Mesh, MeshPhongMaterial, Object3D} from 'vue-gl/node_modules/three';
   import {Namespace, v3, VglObject3d as VglObject3dX} from '@/utils/vglHelpers';
   import MeshLoader from '@/assets/MeshLoader';
   import {applyAccent} from '@/utils/threeHelper';
 
   @Component({
-    mixins: [VglObject3d]
+    mixins: [VglObject3d],
   })
   export default class Model extends Vue {
     @Prop() public model!: string;
@@ -19,9 +19,16 @@
 
     public vglNamespace!: Namespace;
     public vglObject3d!: VglObject3dX;
+    public isLoaded: boolean = false;
 
     public get inst(): Object3D {
-      return this.vglNamespace.object3ds[this.resourceName] || this.dummyObject;
+      const target = this.vglNamespace.object3ds[this.resourceName];
+      if (this.isLoaded && target && target.type) {
+        window.console.log(target);
+        return target;
+      } else {
+        return this.dummyObject;
+      }
     }
 
     public get resourceName(): string {
@@ -36,11 +43,6 @@
       return m;
     }
 
-    // @Watch('position')
-    // public watchPosition() {
-    //   window.console.log(v3((this as any).position));
-    // }
-
     private created() {
       // save model into namespace for caching
       const meshLoader = MeshLoader.getInstance();
@@ -48,22 +50,27 @@
       if (!this.vglNamespace.object3ds[this.resourceName]) {
         let obj: Object3D;
 
-        if (meshLoader.objects[this.model]) {
-          obj = meshLoader.objects[this.model].clone();
-        } else {
-          const m = new Mesh();
-          m.geometry = new BoxGeometry(20, 20, 20);
-          m.material = new MeshPhongMaterial();
-          obj = m;
-        }
+        meshLoader.onLoad(() => {
+          if (meshLoader.objects[this.model]) {
+            obj = meshLoader.objects[this.model].clone();
+          } else {
+            const m = new Mesh();
+            m.geometry = new BoxGeometry(20, 20, 20);
+            m.material = new MeshPhongMaterial();
+            obj = m;
+          }
 
 
-        console.log(this.vglObject3d.inst);
-        obj.parent = this.vglObject3d.inst;
+          obj.parent = this.vglObject3d.inst;
 
-        applyAccent(obj, this.accent);
+          applyAccent(obj, this.accent);
 
-        this.vglNamespace.object3ds[this.resourceName] = obj;
+          this.vglNamespace.object3ds[this.resourceName] = obj;
+
+          this.isLoaded = true;
+        });
+      } else {
+        this.isLoaded = true;
       }
 
 

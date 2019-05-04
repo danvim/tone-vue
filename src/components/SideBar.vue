@@ -1,14 +1,14 @@
 <template>
   <div id="side-bar">
     <div class="bar">
-      <icon-button icon-class="green tone-base" text="Base"/>
-      <icon-button icon-class="light tone-barrack" text="Barrack"/>
-      <icon-button icon-class="light tone-barrack" text="Barrack"/>
-      <icon-button icon-class="light tone-barrack" text="Barrack"/>
+      <icon-button icon-class="green tone-base" text="Base" :on-click="onClick"/>
+      <icon-button icon-class="light tone-barrack" text="Barrack" :on-click="onClick"/>
+      <icon-button icon-class="light tone-barrack" text="Barrack" :on-click="onClick"/>
+      <icon-button icon-class="light tone-barrack" text="Barrack" :on-click="onClick"/>
     </div>
     <div class="bar">
-      <icon-button icon-class="red tone-berserk" text="All-Out Attack"/>
-      <icon-button icon-class="yellow tone-job" text="Jobs"/>
+      <icon-button icon-class="red tone-berserk" text="All-Out Attack" :on-click="onClick"/>
+      <icon-button icon-class="yellow tone-job" text="Jobs" :on-click="onClick"/>
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@
     components: {
       IconButton,
       popper: Popper,
-    }
+    },
   })
   export default class SideBar extends Vue {
     private popperOptions = {
@@ -38,6 +38,10 @@
         },
       },
     };
+
+    public onClick() {
+      //
+    }
   }
 </script>
 

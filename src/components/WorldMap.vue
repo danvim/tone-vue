@@ -12,7 +12,7 @@
   // noinspection TypeScriptCheckImport
   import * as Vgl from 'vue-gl';
   import Tile from '@/components/Game/Tile.vue';
-  import {Object3D} from 'three';
+  import {Object3D} from 'vue-gl/node_modules/three';
 
   const {
     VglGroup,

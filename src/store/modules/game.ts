@@ -2,7 +2,7 @@ import {GameAction, GameMutation, GameState, RootState} from '@/store/types';
 import {Module} from 'vuex';
 import {Vue} from 'vue-property-decorator';
 import EntityInfo from '@/game/EntityInfo';
-import {Euler, Vector3} from 'three';
+import {Euler, Vector3} from 'vue-gl/node_modules/three';
 import {ENTITY_MESH_DICT} from '@/configs/EntityMeshDict';
 
 export const state: GameState = {
@@ -16,7 +16,9 @@ export const state: GameState = {
 
 export const mutations: GameMutation = {
   addPlayer(s: GameState, {player}): void {
-    s.players.push(player);
+    if (s.players.filter((p) => p.playerId === player.playerId).length === 0) {
+      s.players.push(player);
+    }
   },
   removePlayer(s: GameState, {username}): void {
     for (let i = 0; i < s.players.length; i++) {

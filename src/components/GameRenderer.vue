@@ -91,7 +91,7 @@ import {PackageType} from 'tone-core/dist/lib';
     Spherical,
     Vector2,
     Vector3,
-  } from 'three';
+  } from 'vue-gl/node_modules/three';
   import {
     s3,
     v3,

@@ -1,15 +1,15 @@
 import {EntityType} from 'tone-core/dist/lib';
 
 export const ENTITY_MESH_DICT: {[k in EntityType]: string} = {
-  [EntityType.WORKER]: 'worker',
-  [EntityType.SOLDIER_0]: 'sentinel',
-  [EntityType.SOLDIER_1]: 'sentinel',
-  [EntityType.SOLDIER_2]: 'sentinel',
-  [EntityType.SEED]: 'seed',
-  [EntityType.ENEMY_0]: 'enemy',
-  [EntityType.ENEMY_1]: 'enemy',
-  [EntityType.ENEMY_2]: 'enemy',
-  [EntityType.BULLET_0]: 'bullet',
-  [EntityType.BULLET_1]: 'bullet',
-  [EntityType.BULLET_2]: 'bullet',
+  [EntityType.WORKER]: 'WORKER',
+  [EntityType.SOLDIER_0]: 'SENTINEL',
+  [EntityType.SOLDIER_1]: 'SENTINEL',
+  [EntityType.SOLDIER_2]: 'SENTINEL',
+  [EntityType.SEED]: 'SEED',
+  [EntityType.ENEMY_0]: 'ENEMY',
+  [EntityType.ENEMY_1]: 'ENEMY',
+  [EntityType.ENEMY_2]: 'ENEMY',
+  [EntityType.BULLET_0]: 'BULLET',
+  [EntityType.BULLET_1]: 'BULLET',
+  [EntityType.BULLET_2]: 'BULLET',
 };

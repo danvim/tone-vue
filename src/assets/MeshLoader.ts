@@ -1,6 +1,6 @@
-import {GLTF, Object3D} from 'three';
-import GLTFLoader from 'three-gltf-loader';
+import {Object3D} from 'vue-gl/node_modules/three';
 import {GLTFPrepInfo, GLTFS, GLTFS_DIRECTORY} from '@/configs/Meshes';
+import {GLTF, GLTFLoader} from 'vue-gl/node_modules/three/examples/jsm/loaders/GLTFLoader';
 
 /**
  * Singleton class responsible for loading required 3D meshes to THREE format and store them in the global scope.
@@ -67,14 +67,19 @@ export default class MeshLoader {
           return;
         },
         (error: ErrorEvent) => {
-          return;
+          window.console.error(error);
+          this.loadingCurrent++;
         },
       );
     });
   }
 
   public onLoad(cb: () => void) {
-    this.onLoadCallbacks.push(cb);
+    if (this.isLoaded()) {
+      cb();
+    } else {
+      this.onLoadCallbacks.push(cb);
+    }
   }
 
   public onProgress(cb: (i: number) => void) {

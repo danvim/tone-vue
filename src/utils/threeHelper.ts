@@ -1,4 +1,4 @@
-import {Color, Material, Mesh, MeshPhongMaterial, Object3D} from 'three';
+import {Color, Material, Mesh, MeshPhongMaterial, Object3D} from 'vue-gl/node_modules/three';
 
 export function closest(o: Object3D, name: string): Object3D | null {
   let p: Object3D | null = o;
@@ -10,8 +10,11 @@ export function closest(o: Object3D, name: string): Object3D | null {
 
 export function findAllType(o: Object3D, type: string): Object3D[] {
   const results = [];
+  if (!o) {
+    return [];
+  }
   o.children.forEach((child) => findAllType(child, type).forEach((p) => results.push(p)));
-  if (o.type === type) {
+  if (o && o.type === type) {
     results.push(o);
   }
   return results;

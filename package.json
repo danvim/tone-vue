@@ -19,7 +19,7 @@
     "dat.gui": "^0.7.6",
     "eslint": "^5.16.0",
     "peerjs": "^0.3.24",
-    "three": "^0.101.1",
+    "three": "^0.103.0",
     "three-gltf-loader": "^1.103.0",
     "three-orbit-controls": "^82.1.0",
     "tone-core": "git+ssh://git@github.com/danvim/tone-core.git#master",

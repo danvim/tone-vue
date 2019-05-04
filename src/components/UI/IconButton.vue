@@ -15,7 +15,7 @@
   @Component({
     components: {
       popper: Popper,
-    }
+    },
   })
   export default class IconButton extends Vue {
     @Prop() public text!: string;

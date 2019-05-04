@@ -1,5 +1,6 @@
-import {Euler, GLTF, Mesh, Object3D, Vector3} from 'three';
+import {Euler, Mesh, Object3D, Vector3} from 'vue-gl/node_modules/three';
 import Materials from '@/assets/Materials';
+import {GLTF} from 'vue-gl/node_modules/three/examples/jsm/loaders/GLTFLoader';
 
 
 /**
@@ -37,5 +38,5 @@ export const DEFAULT_GET_OBJECT3D = (gltf: GLTF): Object3D => {
   object3d.name = 'unnamed-object';
   const allMeshes = DEFAULT_GET_MESHES(gltf);
   object3d.add(...allMeshes);
-  return object3d;
+  return object3d.clone();
 };

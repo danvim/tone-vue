@@ -6,7 +6,7 @@ import axios from 'axios';
 import Fragment from 'vue-fragment';
 
 Vue.config.productionTip = false;
-Vue.use(Fragment);
+Vue.use(Fragment.Plugin);
 Vue.use(Vuex);
 
 import App from './App.vue';

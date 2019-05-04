@@ -20,7 +20,7 @@
     Object3D,
     Shape,
     Vector3,
-  } from 'three';
+  } from 'vue-gl/node_modules/three';
   import {shapeHex} from '@/utils/shapes';
   import {VglNamespace, VglObject3d as VglObject3dX} from '@/utils/vglHelpers';
   import {VglGroup, VglMesh, VglObject3d} from 'vue-gl';
@@ -56,7 +56,7 @@
     public $refs!: {
       group: VglObject3dX,
       tileObj: VglObject3dX,
-      tileMesh: VglObject3dX
+      tileMesh: VglObject3dX,
     };
 
     /**

@@ -4,7 +4,7 @@
 
 import {Cartesian} from 'tone-core/dist/lib/Coordinates';
 import {polygonCorner} from './polymath';
-import {Shape} from 'three';
+import {Shape} from 'vue-gl/node_modules/three';
 
 /**
  *

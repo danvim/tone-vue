@@ -1,4 +1,4 @@
-import {LineBasicMaterial, Material, MeshPhongMaterial, Color} from 'three';
+import {LineBasicMaterial, Material, MeshPhongMaterial, Color} from 'vue-gl/node_modules/three';
 
 const Dirt = new MeshPhongMaterial({
     color: new Color(0xDF6B4E),

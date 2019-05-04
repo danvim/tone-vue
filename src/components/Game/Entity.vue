@@ -16,10 +16,10 @@
       Model,
       VglObject3d,
       VglMesh,
-    }
+    },
   })
   export default class Entity extends Vue {
-    @Prop() entityInfo!: EntityInfo;
+    @Prop() public entityInfo!: EntityInfo;
 
     private v3 = v3;
 
@@ -27,17 +27,6 @@
       return ACCENTS[this.entityInfo.playerId];
     }
 
-    private created() {
-      const meshLoader = MeshLoader.getInstance();
-
-      if (meshLoader.objects.hasOwnProperty(this.entityInfo.model)) {
-        // The model can be loaded. The mesh will be cloned and player color will be updated in its materials.
-        const obj = meshLoader.objects[this.entityInfo.model];
-        window.console.log(obj);
-      } else {
-        // The model wasn't loaded. Perhaps the config hasn't been updated or the model is unknown.
-      }
-    }
   }
 </script>
 

@@ -31,14 +31,14 @@ import {PackageType} from 'tone-core/dist/lib';
   import Login from '@/components/Login.vue';
   import Loading from '@/components/Loading.vue';
   import Lobby from '@/components/Lobby.vue';
-  import * as THREE from 'three';
+  import * as THREE from 'vue-gl/node_modules/three';
   import {namespace, State} from 'vuex-class';
   import {
     MoveEntityMessage,
     PackageType,
     SpawnEntityMessage,
     UpdateLobbyMessage,
-    UpdateTilesMessage
+    UpdateTilesMessage,
   } from 'tone-core/dist/lib';
   import {HOST, PEER_PATH, PORT} from '@/configs/Server';
   import axios from 'axios';
@@ -73,7 +73,7 @@ import {PackageType} from 'tone-core/dist/lib';
       connections: '',
     };
 
-    private isShowingDebugInfo: boolean = true;
+    private isShowingDebugInfo: boolean = false;
     private GameScreen = GameScreen;
 
     private onWindowKeyUp(e: KeyboardEvent) {
@@ -157,7 +157,6 @@ import {PackageType} from 'tone-core/dist/lib';
 <style lang="scss">
   #debug-panel {
     position:absolute;
-    display: none;
     top:0;
     left:0;
     height: 200px;
