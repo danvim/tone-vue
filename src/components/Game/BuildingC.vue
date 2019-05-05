@@ -6,7 +6,7 @@
   import {Component, Vue} from 'vue-property-decorator';
 
   @Component({})
-  export default class Building extends Vue {
+  export default class BuildingC extends Vue {
   }
 </script>
 

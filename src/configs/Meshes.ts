@@ -36,4 +36,28 @@ export const GLTFS: GLTFPrepInfo[] = [
     name: 'collector',
     done: DEFAULT_GET_OBJECT3D,
   },
+  {
+    name: 'spawn',
+    done: DEFAULT_GET_OBJECT3D,
+  },
+  {
+    name: 'barrack',
+    done: DEFAULT_GET_OBJECT3D,
+  },
+  {
+    name: 'ic',
+    done: DEFAULT_GET_OBJECT3D,
+  },
+  {
+    name: 'bullet',
+    done: DEFAULT_GET_OBJECT3D,
+  },
+  {
+    name: 'reclaimator',
+    done: DEFAULT_GET_OBJECT3D,
+  },
+  {
+    name: 'training',
+    done: DEFAULT_GET_OBJECT3D,
+  },
 ];

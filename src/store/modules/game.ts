@@ -1,9 +1,9 @@
-import {GameAction, GameMutation, GameState, RootState} from '@/store/types';
+import {GameAction, GameGetter, GameMutation, GameState, RootState} from '@/store/types';
 import {Module} from 'vuex';
 import {Vue} from 'vue-property-decorator';
-import EntityInfo from '@/game/EntityInfo';
 import {Euler, Vector3} from 'vue-gl/node_modules/three';
-import {ENTITY_MESH_DICT} from '@/configs/EntityMeshDict';
+import Building from '@/game/Building';
+import Entity from '@/game/Entity';
 
 export const state: GameState = {
   map: {},
@@ -11,7 +11,7 @@ export const state: GameState = {
   ic: 0,
   workerPop: 0,
   totalPop: 0,
-  entityInfos: {},
+  things: {},
 };
 
 export const mutations: GameMutation = {
@@ -31,45 +31,62 @@ export const mutations: GameMutation = {
   updateMap(s: GameState, {map}) {
     Object.keys(map).forEach((key) => Vue.set(s.map, key, map[key]));
   },
-  updateEntityInfo(s: GameState, {uid, locRot, playerId = -2, model = ''}): void {
-    if (!s.entityInfos.hasOwnProperty(uid)) {
-      // entityInfos is not carrying this entity
-      const newEntityInfo: EntityInfo = {
-        model,
-        playerId,
-        locRot: {position: locRot.position, rotation: locRot.rotation},
-        nextLocRot:  {position: locRot.position, rotation: locRot.rotation},
-      };
-      Vue.set(s.entityInfos, uid, newEntityInfo);
-    } else {
-      // Update each property individually
-      const t = s.entityInfos[uid];
-      t.nextLocRot.position = locRot.position;
-      t.nextLocRot.rotation = locRot.rotation;
+  spawnEntity({things}, {uuid, position, playerId = -2, entityType}): void {
+    if (!things.hasOwnProperty(uuid)) {
+      Vue.set(things, uuid, new Entity(1, playerId, uuid, position, new Euler(0, 0, 0), entityType));
     }
+  },
+  moveEntity({things}, {uuid, position, rotation}): void {
+    if (!things.hasOwnProperty(uuid)) {
+      window.console.error(`Things does not contain uuid ${uuid}`);
+      return;
+    }
+    if (!(things[uuid] instanceof Entity)) {
+      window.console.error(`Thing with uuid ${uuid} is not an entity`);
+      return;
+    }
+    const t = things[uuid] as Entity;
+    t.nextPosition = position;
+    t.nextRotation = rotation;
   },
 };
 
 export const actions: GameAction = {
   moveEntity({commit}, {message}): void {
-    commit('updateEntityInfo', {
-      uid: message.uid,
-      locRot: {
-        position: new Vector3(message.location.x, message.location.y, message.location.z),
-        rotation: new Euler(message.pitch, message.yaw, 0),
-      },
+    commit('moveEntity', {
+      uuid: message.uid,
+      position: new Vector3(message.location.x, message.location.y, message.location.z),
+      rotation: new Euler(message.pitch, message.yaw, 0),
     });
   },
   spawnEntity({commit}, {message}): void {
-    commit('updateEntityInfo', {
-      uid: message.uid,
-      model: ENTITY_MESH_DICT[message.entityType],
+    commit('spawnEntity', {
+      uuid: message.uid,
+      position: new Vector3(message.position.x, message.position.y, message.position.z),
       playerId: message.playerId,
-      locRot: {
-        position: new Vector3(message.position.x, message.position.y, message.position.z),
-        rotation: new Euler(0, 0, 0),
-      },
+      entityType: message.entityType,
     });
+  },
+};
+
+export const getters: GameGetter = {
+  buildings: ({things}) => {
+    const results: {[k in string]: Building} = {};
+    Object.keys(things).forEach((key) => {
+      if (things[key] instanceof Building) {
+        results[key] = things[key] as Building;
+      }
+    });
+    return results;
+  },
+  entities: ({things}) => {
+    const results: {[k in string]: Entity} = {};
+    Object.keys(things).forEach((key) => {
+      if (things[key] instanceof Entity) {
+        results[key] = things[key] as Entity;
+      }
+    });
+    return results;
   },
 };
 
@@ -78,4 +95,5 @@ export const game: Module<GameState, RootState> = {
   state,
   mutations,
   actions,
+  getters,
 };

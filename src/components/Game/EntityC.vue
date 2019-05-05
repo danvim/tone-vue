@@ -1,15 +1,15 @@
 <template>
-  <model :model="entityInfo.model" :accent="accent" :position="v3(entityInfo.nextLocRot.position)" :rotation="v3(entityInfo.nextLocRot.rotation)"/>
+  <model :model="model" :accent="accent" :position="v3(entity.nextPosition)" :rotation="v3(entity.nextRotation)"/>
 </template>
 
 <script lang="ts">
   import {Component, Prop, Vue} from 'vue-property-decorator';
-  import EntityInfo from '@/game/EntityInfo';
   import {VglMesh, VglObject3d} from 'vue-gl';
-  import MeshLoader from '@/assets/MeshLoader';
   import Model from '@/components/Utils/Model.vue';
   import {ACCENTS} from '@/configs/Players';
   import {v3} from '@/utils/vglHelpers';
+  import Entity from '@/game/Entity';
+  import {ENTITY_MESH_DICT} from '@/configs/EntityMeshDict';
 
   @Component({
     components: {
@@ -18,13 +18,17 @@
       VglMesh,
     },
   })
-  export default class Entity extends Vue {
-    @Prop() public entityInfo!: EntityInfo;
+  export default class EntityC extends Vue {
+    @Prop() public entity!: Entity;
 
     private v3 = v3;
 
     public get accent() {
-      return ACCENTS[this.entityInfo.playerId];
+      return ACCENTS[this.entity.playerId];
+    }
+
+    public get model() {
+      return ENTITY_MESH_DICT[this.entity.entityType];
     }
 
   }
