@@ -32,6 +32,23 @@
   }
 }
 
+#tile-panel {
+  position: absolute;
+  height: 200px;
+  width:400px;
+  min-width: 0;
+  bottom:0;
+  left:300px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 7px 15px;
+  @include dialog-color($darker-faded-blue);
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
 .map-camera {
   position: absolute;
   bottom: 5px;
@@ -47,16 +64,16 @@
 .resources {
   display: flex;
   flex-direction: row;
+}
 
-  > *, .resource {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-right: 20px;
+.resources > *, .resource {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 20px;
 
-    .resource {
-      margin: 0;
-    }
+  .resource {
+    margin: 0;
   }
 }
 
@@ -112,4 +129,21 @@
       transform-origin: left;
     }
   }
+}
+
+
+// Build Radio
+
+.build-radio {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: $border-color;
+  grid-gap: 3px;
+  border-radius: 3px;
+  padding: 3px;
+  margin-bottom: 3px;
+}
+
+.center {
+  margin: 0 auto;
 }

@@ -1,10 +1,3 @@
-import {PackageType} from 'tone-core/dist/lib';
-import {PackageType} from 'tone-core/dist/lib';
-import {PackageType} from 'tone-core/dist/lib';
-import {GameScreen} from './utils/GameScreen';
-import {GameScreen} from './utils/GameScreen';
-import {PackageType} from 'tone-core/dist/lib';
-import {PackageType} from 'tone-core/dist/lib';
 <template>
   <div id="app">
     <transition name="fade" v-if="currentScreen === GameScreen.LOADING">

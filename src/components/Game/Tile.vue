@@ -41,6 +41,7 @@
   };
 
   const game = namespace('game');
+  const ui = namespace('ui');
 
   /**
    * This component denotes a single tile given the TileInfo and Axial coordinates that associates with it.
@@ -57,8 +58,9 @@
     @Prop() public axialCoords!: string;
     @Prop() public tileInfo!: TileInfo;
     @game.Getter public buildingsByAxial!: {[k in string]: Building};
+    @ui.Mutation public selectTile: any;
+    @ui.State public selectedTile: any;
     public hovering: boolean = false;
-    public selected: boolean = false;
 
     public materialName: string = 'Dirt';
 
@@ -84,7 +86,7 @@
 
     public activate(): void {
       if (this.hovering) {
-        this.selected = true;
+        this.selectTile({axial: this.axialCoords});
       }
     }
 
@@ -97,13 +99,8 @@
       }
     }
 
-    /**
-     * Remove selection
-     */
-    public deselect() {
-      if (this.selected) {
-        this.selected = false;
-      }
+    public get selected() {
+      return this.selectedTile === this.axialCoords;
     }
 
     public get axial(): Axial {

@@ -1,4 +1,3 @@
-import {PackageType} from 'tone-core/dist/lib';
 <template>
   <div class="fs">
     <vgl-namespace ref="vglNs">
@@ -69,6 +68,7 @@ import {PackageType} from 'tone-core/dist/lib';
           <vgl-orthographic-camera ref="miniMapCamera" name="cmr2" orbit-position="30 -40 0" :zoom="0.25"/>
         </vgl-renderer>
       </div>
+      <tile-panel/>
     </vgl-namespace>
   </div>
 </template>
@@ -128,15 +128,18 @@ import {PackageType} from 'tone-core/dist/lib';
   import {gamePopperOptions} from '@/utils/uiHelper';
   import SideBar from '@/components/SideBar.vue';
   import Entities from '@/components/Game/Entities.vue';
+  import TilePanel from '@/components/UI/TilePanel.vue';
   // tslint:disable-next-line
   const Popper = require('vue-popperjs');
 
   const connections = namespace('connections');
 
   const game = namespace('game');
+  const ui = namespace('ui');
 
   @Component({
     components: {
+      TilePanel,
       Entities,
       SideBar,
       VglHemisphereLight,
@@ -160,6 +163,7 @@ import {PackageType} from 'tone-core/dist/lib';
     @game.State public ic!: number;
     @game.Getter public myWorkerPop!: number;
     @game.Getter public myTotalPop!: number;
+    @ui.Mutation public selectTile!: any;
 
     public cameraDistance: number = 200;
     public cameraTheta: number = 0;
@@ -167,6 +171,7 @@ import {PackageType} from 'tone-core/dist/lib';
     public cameraOrbitTarget: Vector3 = new Vector3(0, 0, 0);
     public raycaster = new Raycaster();
     public mousePos = new Vector2();
+    public intersecting: boolean = false;
 
     public $refs!: {
       vglNs: VglNamespaceX;
@@ -230,11 +235,17 @@ import {PackageType} from 'tone-core/dist/lib';
       (this.$refs.worldMap as any).broadcastOffHover();
       if (intersects.length > 0) {
         (this.$refs.worldMap as any).broadcastHover(intersects[0].object);
+        this.intersecting = true;
+      } else {
+        this.intersecting = false;
       }
     }
 
     private onClick(): void {
       (this.$refs.worldMap as any).broadcastSelect();
+      if (!this.intersecting) {
+        this.selectTile({axial: ''});
+      }
     }
 
     private onWheel(e: WheelEvent): void {

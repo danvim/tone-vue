@@ -52,11 +52,7 @@
     }
 
     public broadcastSelect(group: Object3D): void {
-      this.$refs.tiles.forEach((tile: any) => {tile.deselect(); tile.activate(); });
-    }
-
-    public broadcastDeselect(): void {
-      this.$refs.tiles.forEach((tile: any) => tile.deselect());
+      this.$refs.tiles.forEach((tile: any) => {tile.activate(); });
     }
   }
 </script>

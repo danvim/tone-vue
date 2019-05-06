@@ -2,10 +2,16 @@
 
 .btn {
   font-size: 20px;
-  padding: 10px 20px;
+  padding: 10px 30px;
   min-width: 150px;
   border-radius: 3px;
   transition: 0.2s all ease;
+}
+
+.btn.btn-sm {
+  font-size: 16px;
+  padding: 8px 25px;
+  min-width: 60px;
 }
 
 @mixin btn-color($color: $blue) {
@@ -29,4 +35,22 @@
 
 .btn-blue {
   @include btn-color($blue);
+}
+
+.btn-outline {
+  background-color: $slate;
+  outline: none;
+  border:0;
+  color: $lightest-slate;
+  font-size: 14px;
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  &:active, &.active {
+    background-color: $border-color;
+    color: $blue;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  }
 }

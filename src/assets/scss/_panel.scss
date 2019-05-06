@@ -13,7 +13,7 @@
   color: lighten($color, 35);
   border: 3px solid $color;
 
-  h1 {
+  h1, h2, h3, h4 {
     text-shadow: 0 0 10px $color;
     color: lighten($color, 20);
   }

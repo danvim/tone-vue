@@ -62,3 +62,11 @@ export interface GameGetter extends GetterTree<GameState, RootState> {
   myTotalPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;
   myWorkerPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;
 }
+
+export interface UIState {
+  selectedTile: string;
+}
+
+export interface UIMutation extends MutationTree<UIState> {
+  selectTile(s: UIState, payload: {axial: string}): void;
+}

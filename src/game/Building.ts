@@ -20,3 +20,10 @@ export default class Building extends Thing implements BuildingInterface {
     this.progress = progress;
   }
 }
+
+export const STORAGE_BUILDINGS: BuildingType[] = [
+  BuildingType.BASE,
+  BuildingType.BARRACK,
+  BuildingType.STRUCT_GENERATOR,
+  BuildingType.TRAINING_DATA_GENERATOR,
+];
