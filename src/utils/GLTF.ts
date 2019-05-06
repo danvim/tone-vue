@@ -1,5 +1,4 @@
-import {Euler, Mesh, Object3D, Vector3} from 'vue-gl/node_modules/three';
-import Materials from '@/assets/Materials';
+import {Mesh, Object3D} from 'vue-gl/node_modules/three';
 import {GLTF} from 'vue-gl/node_modules/three/examples/jsm/loaders/GLTFLoader';
 
 
@@ -36,7 +35,9 @@ export const DEFAULT_GET_OBJECT3D = (gltf: GLTF): Object3D => {
   object3d.castShadow = true;
   object3d.receiveShadow = true;
   object3d.name = 'unnamed-object';
+  object3d.scale.setScalar(5);
   const allMeshes = DEFAULT_GET_MESHES(gltf);
   object3d.add(...allMeshes);
-  return object3d.clone();
+  object3d.traverse((child) => child.castShadow = true);
+  return object3d;
 };

@@ -1,4 +1,5 @@
 import {PackageType} from 'tone-core/dist/lib';
+import {PackageType} from 'tone-core/dist/lib';
 import {GameScreen} from './utils/GameScreen';
 import {GameScreen} from './utils/GameScreen';
 import {PackageType} from 'tone-core/dist/lib';
@@ -34,6 +35,7 @@ import {PackageType} from 'tone-core/dist/lib';
   import * as THREE from 'vue-gl/node_modules/three';
   import {namespace, State} from 'vuex-class';
   import {
+    BuildMessage,
     MoveEntityMessage,
     PackageType,
     SpawnEntityMessage,
@@ -65,6 +67,7 @@ import {PackageType} from 'tone-core/dist/lib';
     @game.Mutation public updateMap: any;
     @game.Action public spawnEntity: any;
     @game.Action public moveEntity: any;
+    @game.Action public build: any;
 
     public currentScreen: GameScreen = GameScreen.LOADING;
 
@@ -146,6 +149,12 @@ import {PackageType} from 'tone-core/dist/lib';
         const moveEntityMessage = message as MoveEntityMessage;
         this.moveEntity({message: moveEntityMessage});
       });
+
+      protocol.on(PackageType.BUILD, (message, data) => {
+        const buildMessage = message as BuildMessage;
+        this.build({message: buildMessage});
+      });
+
     }
 
     private destroyed() {

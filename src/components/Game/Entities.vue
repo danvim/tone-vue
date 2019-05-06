@@ -25,7 +25,3 @@
     @game.Getter public entities!: {[k in string]: Entity};
   }
 </script>
-
-<style scoped lang="scss">
-
-</style>

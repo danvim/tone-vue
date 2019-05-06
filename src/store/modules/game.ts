@@ -49,6 +49,19 @@ export const mutations: GameMutation = {
     t.nextPosition = position;
     t.nextRotation = rotation;
   },
+  build({things}, {uuid, position, buildingType, playerId, progress}): void {
+    if (!things.hasOwnProperty(uuid)) {
+      Vue.set(things, uuid, new Building(playerId, uuid, buildingType, position, progress));
+    } else {
+      // progressing
+      if (!(things[uuid] instanceof Building)) {
+        window.console.error(`Thing with uuid ${uuid} is not a building`);
+        return;
+      }
+      const t = things[uuid] as Building;
+      t.progress = progress;
+    }
+  },
 };
 
 export const actions: GameAction = {
@@ -67,14 +80,33 @@ export const actions: GameAction = {
       entityType: message.entityType,
     });
   },
+  build({commit}, {message}): void {
+    commit('build', {
+      uuid: message.uid,
+      position: message.axialCoords[0].toAxial(),
+      buildingType: message.buildingType,
+      playerId: message.playerId,
+      progress: message.progress,
+    });
+  },
 };
 
 export const getters: GameGetter = {
-  buildings: ({things}) => {
+  buildingsByUuid: ({things}) => {
     const results: {[k in string]: Building} = {};
     Object.keys(things).forEach((key) => {
       if (things[key] instanceof Building) {
         results[key] = things[key] as Building;
+      }
+    });
+    return results;
+  },
+  buildingsByAxial: ({things}) => {
+    const results: {[k in string]: Building} = {};
+    Object.keys(things).forEach((key) => {
+      if (things[key] instanceof Building) {
+        const bld = things[key] as Building;
+        results[bld.tilePosition.asString] = bld;
       }
     });
     return results;

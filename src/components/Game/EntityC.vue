@@ -1,5 +1,5 @@
 <template>
-  <model :model="model" :accent="accent" :position="v3(entity.nextPosition)" :rotation="v3(entity.nextRotation)"/>
+  <model :model="model" :accent="accent" :position="v3(entity.nextPosition)" :rotation="v3(entity.nextRotation)" :cast-shadow="true" :receive-shadow="true"/>
 </template>
 
 <script lang="ts">
@@ -33,7 +33,3 @@
 
   }
 </script>
-
-<style scoped lang="scss">
-
-</style>

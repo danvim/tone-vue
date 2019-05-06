@@ -20,15 +20,11 @@
     public vglNamespace!: Namespace;
     public vglObject3d!: VglObject3dX;
     public isLoaded: boolean = false;
+    public selfObject?: Object3D;
 
     public get inst(): Object3D {
-      const target = this.vglNamespace.object3ds[this.resourceName];
-      if (this.isLoaded && target && target.type) {
-        window.console.log(target);
-        return target;
-      } else {
-        return this.dummyObject;
-      }
+      const target = this.selfObject;
+      return this.isLoaded && target && target.type ? target : this.dummyObject;
     }
 
     public get resourceName(): string {
@@ -73,6 +69,7 @@
         this.isLoaded = true;
       }
 
+      this.selfObject = this.vglNamespace.object3ds[this.resourceName].clone();
 
     }
   }

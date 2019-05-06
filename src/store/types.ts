@@ -1,6 +1,14 @@
 import Player from '@/utils/Player';
 import {ActionContext, ActionTree, GetterTree, MutationTree} from 'vuex';
-import {EntityType, MoveEntityMessage, SpawnEntityMessage, TileMap} from 'tone-core/dist/lib';
+import {
+  Axial,
+  BuildingType,
+  BuildMessage,
+  EntityType,
+  MoveEntityMessage,
+  SpawnEntityMessage,
+  TileMap
+} from 'tone-core/dist/lib';
 import LocRot from '@/game/LocRot';
 import Thing from '@/game/Thing';
 import Building from '@/game/Building';
@@ -26,17 +34,23 @@ export interface GameMutation extends MutationTree<GameState> {
   updateMap(s: GameState, payload: { map: TileMap}): void;
   spawnEntity(
     s: GameState,
-    payload: {uuid: string; position: Vector3, playerId: number, entityType: EntityType},
+    payload: {uuid: string, position: Vector3, playerId: number, entityType: EntityType},
     ): void;
   moveEntity(s: GameState, payload: {uuid: string; position: Vector3, rotation: Euler}): void;
+  build(
+    s: GameState,
+    payload: {uuid: string, position: Axial, playerId: number, buildingType: BuildingType, progress: number},
+    ): void;
 }
 
 export interface GameAction extends ActionTree<GameState, RootState> {
   spawnEntity(injectee: ActionContext<GameState, RootState>, payload: {message: SpawnEntityMessage}): void;
   moveEntity(injectee: ActionContext<GameState, RootState>, payload: {message: MoveEntityMessage}): void;
+  build(injectee: ActionContext<GameState, RootState>, payload: {message: BuildMessage}): void;
 }
 
 export interface GameGetter extends GetterTree<GameState, RootState> {
-  buildings: (state: GameState) => {[k in string]: Building};
+  buildingsByUuid: (state: GameState) => {[k in string]: Building};
+  buildingsByAxial: (state: GameState) => {[k in string]: Building};
   entities: (state: GameState) => {[k in string]: Entity};
 }
