@@ -66,6 +66,8 @@ export interface GameGetter extends GetterTree<GameState, RootState> {
   entities: (state: GameState) => {[k in string]: Entity};
   myTotalPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;
   myWorkerPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;
+  territoryPlayersByAxial:
+    (state: GameState, getters: {buildingsByType: {[k in number]: Building[]}}) => {[k in string]: number[]};
 }
 
 export interface UIState {

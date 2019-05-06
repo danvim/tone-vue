@@ -14,11 +14,11 @@ import {BuildingType} from 'tone-core/dist/lib';
             <i class="blue icon tone-struct"></i>
             <span class="resource-text">{{building.struct}}</span>
           </div>
-          <div class="resource resource-lg" v-if="storageTypes.includes(resourceType.TRAINING)">
+          <div class="resource resource-lg" v-if="storageTypes.includes(resourceType.TRAINING_DATA)">
             <i class="red icon tone-training"></i>
             <span class="resource-text">{{building.training}}</span>
           </div>
-          <div class="resource resource-lg" v-if="storageTypes.includes(resourceType.PRIME)">
+          <div class="resource resource-lg" v-if="storageTypes.includes(resourceType.PRIME_DATA)">
             <i class="yellow icon tone-prime"></i>
             <span class="resource-text">{{building.prime}}</span>
           </div>
@@ -43,8 +43,8 @@ import {BuildingType} from 'tone-core/dist/lib';
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import {namespace} from 'vuex-class';
-  import Building, {INSTANT_BUILDINGS, ResourceType, STORABLE_STORAGE, STORAGE_BUILDINGS} from '@/game/Building';
-  import {Axial, BuildingProperty, BuildingType, PackageType, TryBuildMessage} from 'tone-core/dist/lib';
+  import Building, {INSTANT_BUILDINGS, STORABLE_STORAGE, STORAGE_BUILDINGS} from '@/game/Building';
+  import {Axial, BuildingProperty, BuildingType, PackageType, ResourceType, TryBuildMessage} from 'tone-core/dist/lib';
   import {snakeToTitle} from '@/utils/String';
   import Player from '@/utils/Player';
 

@@ -1,7 +1,7 @@
 import {LineBasicMaterial, Material, MeshPhongMaterial, Color} from 'vue-gl/node_modules/three';
 
 const Dirt = new MeshPhongMaterial({
-    color: new Color(0xDF6B4E),
+    color: new Color(0x5b6f6d),
     shininess: 20,
     flatShading: true,
 });

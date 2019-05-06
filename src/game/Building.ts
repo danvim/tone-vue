@@ -1,5 +1,5 @@
 import Thing from '@/game/Thing';
-import {Axial, BuildingInterface, BuildingProperty, BuildingType} from 'tone-core/dist/lib';
+import {Axial, BuildingInterface, BuildingProperty, BuildingType, ResourceType} from 'tone-core/dist/lib';
 import {BUILDING_MESH_DICT} from '@/configs/BuildingMeshDict';
 
 export default class Building extends Thing implements BuildingInterface {
@@ -40,21 +40,16 @@ export const INSTANT_BUILDINGS: BuildingType[] = [
   BuildingType.BASE,
 ];
 
-export enum ResourceType {
-  STRUCT,
-  TRAINING,
-  PRIME,
-}
-
-export const ResourceTypeNames: {[k in ResourceType]: string} = {
+export const RESOURCE_NAMES: {[k in ResourceType]: string} = {
   [ResourceType.STRUCT]: 'Struct',
-  [ResourceType.TRAINING]: 'Training Data',
-  [ResourceType.PRIME]: 'Prime Data',
+  [ResourceType.TRAINING_DATA]: 'Training Data',
+  [ResourceType.PRIME_DATA]: 'Prime Data',
+  [ResourceType.WORKER]: 'Worker',
 };
 
 export const STORABLE_STORAGE: {[k in number]: ResourceType[]} = {
-  [BuildingType.BASE]: [ResourceType.STRUCT, ResourceType.TRAINING, ResourceType.PRIME],
-  [BuildingType.BARRACK]: [ResourceType.TRAINING],
+  [BuildingType.BASE]: [ResourceType.STRUCT, ResourceType.TRAINING_DATA, ResourceType.PRIME_DATA],
+  [BuildingType.BARRACK]: [ResourceType.TRAINING_DATA],
   [BuildingType.STRUCT_GENERATOR]: [ResourceType.STRUCT],
-  [BuildingType.TRAINING_DATA_GENERATOR]: [ResourceType.TRAINING],
+  [BuildingType.TRAINING_DATA_GENERATOR]: [ResourceType.TRAINING_DATA],
 };

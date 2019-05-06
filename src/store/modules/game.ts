@@ -5,7 +5,8 @@ import {Euler, Vector3} from 'vue-gl/node_modules/three';
 import Building from '@/game/Building';
 import Entity from '@/game/Entity';
 import {POP_ENTITIES} from '@/configs/EntityMeshDict';
-import {BuildingType, EntityType, JobPriority} from 'tone-core/dist/lib';
+import {BuildingProperty, BuildingType, EntityType, JobPriority, TERRITORY_RADIUS} from 'tone-core/dist/lib';
+import Player from '@/utils/Player';
 
 export const state: GameState = {
   me: null,
@@ -203,6 +204,26 @@ export const getters: GameGetter = {
       if (things[key] instanceof Entity) {
         results[key] = things[key] as Entity;
       }
+    });
+    return results;
+  },
+  territoryPlayersByAxial: ({map}, {buildingsByType}) => {
+    const territorialBuildings = buildingsByType[BuildingType.BASE].concat(buildingsByType[BuildingType.RECLAIMATOR]);
+    const results: {[k in string]: number[]} = {};
+    const mapKeys = Object.keys(map);
+    territorialBuildings.forEach((bld) => {
+      if (bld.progress < BuildingProperty[bld.buildingType].struct) {
+        return;
+      }
+      const axialRange = bld.tilePosition.range(TERRITORY_RADIUS[bld.buildingType]);
+      axialRange.map((axial) => axial.asString)
+        .filter((a) => mapKeys.includes(a))
+        .forEach((key) => {
+          results[key] = results[key] || [];
+          if (!results[key].includes(bld.playerId)) {
+            results[key].push(bld.playerId);
+          }
+      });
     });
     return results;
   },

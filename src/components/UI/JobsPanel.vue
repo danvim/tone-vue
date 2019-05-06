@@ -18,7 +18,7 @@ import {PackageType} from 'tone-core/dist/lib';
   import {Component, Vue, Watch} from 'vue-property-decorator';
   import {namespace} from 'vuex-class';
   import {BuildingType, JobNature, JobPriority, PackageType, UpdateJobMessage} from 'tone-core/dist/lib';
-  import Building from '@/game/Building';
+  import Building, {RESOURCE_NAMES} from '@/game/Building';
   import {snakeToTitle} from '@/utils/String';
 
   const game = namespace('game');
@@ -56,7 +56,7 @@ import {PackageType} from 'tone-core/dist/lib';
       if (job.nature === JobNature.CONSTRUCTION) {
         return `Constructing ${buildingName}.`;
       } else if (job.nature === JobNature.STORAGE) {
-        return `Collecting resources to ${buildingName}.`;
+        return `Collecting ${RESOURCE_NAMES[job.resourceType]} to ${buildingName}.`;
       } else if (job.nature === JobNature.RECRUITMENT) {
         return `Training soldiers at ${buildingName}`;
       }

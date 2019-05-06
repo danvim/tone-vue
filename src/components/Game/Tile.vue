@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-  import {Component, Prop, Vue} from 'vue-property-decorator';
+  import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
   import {TileInfo, Axial, LEVEL_HEIGHT, TILE_SIZE} from 'tone-core/dist/lib';
   import Materials from '@/assets/Materials';
   import {
@@ -30,6 +30,7 @@
   import Building from '@/game/Building';
   import {namespace} from 'vuex-class';
   import BuildingC from '@/components/Game/BuildingC.vue';
+  import {ACCENTS} from '@/configs/Players';
 
   const HEX_SHAPE: Shape = shapeHex(TILE_SIZE);
   const DEFAULT_EXTRUSION_OPTIONS: ExtrudeGeometryOptions = {
@@ -58,11 +59,10 @@
     @Prop() public axialCoords!: string;
     @Prop() public tileInfo!: TileInfo;
     @game.Getter public buildingsByAxial!: {[k in string]: Building};
+    @game.Getter public territoryPlayersByAxial!: {[k in string]: number[]};
     @ui.Mutation public selectTile: any;
     @ui.State public selectedTile: any;
     public hovering: boolean = false;
-
-    public materialName: string = 'Dirt';
 
     public $refs!: {
       group: VglObject3dX,
@@ -147,12 +147,40 @@
       return this.buildingsByAxial[this.axialCoords];
     }
 
+    public get owners(): number[] {
+      return this.territoryPlayersByAxial[this.axialCoords] || [];
+    }
+
     private get resourceName(): string {
       return `tile${this.axialCoords}`;
     }
 
     private get heightName(): string {
-      return `tile${this.tileInfo.height + (this.selected ? 'b' : this.hovering ? 'a' : '')}`;
+      return `tile${this.tileInfo.height + this.owners.toString() + (this.selected ? 'b' : this.hovering ? 'a' : '')}`;
+    }
+
+    @Watch('owners', {immediate: true})
+    private onOwnershipChange(newOwners: number[]) {
+      if (this.$refs.group && newOwners.length > 0) {
+        const ns = this.$refs.group.vglNamespace;
+        const m = ns.materials[this.heightName] = Materials.Dirt.clone() as MeshPhongMaterial;
+        const color = new Color(0xffffff);
+        newOwners.forEach(owner => {
+          color.multiply(ACCENTS[owner]);
+        });
+        m.color.set(color);
+        this.makeMaterials();
+      }
+    }
+
+    private makeMaterials() {
+      const ns = this.$refs.group.vglNamespace;
+      const m = ns.materials[this.heightName] as MeshPhongMaterial;
+      const ma = ns.materials[this.heightName + 'a'] = m.clone();
+      const mb = ns.materials[this.heightName + 'b'] = m.clone();
+      m.color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2);
+      ma.color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2).add(new Color(0.05, 0.05, 0.05));
+      mb.color.add(new Color(0.5, 0.5, 0.5));
     }
 
     private mounted() {
@@ -165,11 +193,7 @@
         ns.geometries[this.resourceName] = this.geometry;
 
         const m = ns.materials[this.heightName] = Materials.Dirt.clone() as MeshPhongMaterial;
-        const ma = ns.materials[this.heightName + 'a'] = m.clone();
-        const mb = ns.materials[this.heightName + 'b'] = m.clone();
-        m.color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2);
-        ma.color.multiplyScalar((this.tileInfo.height || 0) / 5 + 0.2).add(new Color(0.05, 0.05, 0.05));
-        mb.color = new Color(1, 1, 1);
+        this.makeMaterials();
       }
     }
   }

@@ -45,6 +45,6 @@ export const DEFAULT_GET_OBJECT3D = (gltf: GLTF): Object3D => {
 
 export const BUILDING_GET_OBJECT3D = (gltf: GLTF): Object3D => {
   const object3d = DEFAULT_GET_OBJECT3D(gltf);
-  object3d.scale.setScalar(12);
+  object3d.scale.setScalar(15);
   return object3d;
 };
