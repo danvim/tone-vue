@@ -187,7 +187,7 @@
       worldMap: WorldMap;
     };
 
-    public datGUI: GUI;
+    public datGUI?: GUI;
 
     private width: number = 0;
     private height: number = 0;
