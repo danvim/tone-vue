@@ -61,14 +61,15 @@
 
           applyAccent(obj, this.accent);
 
-          this.vglNamespace.object3ds[this.resourceName] = obj.clone();
+          this.vglNamespace.object3ds[this.resourceName] = obj;
+
+          this.selfObject = this.vglNamespace.object3ds[this.resourceName].clone();
 
           this.isLoaded = true;
         });
       } else {
         this.isLoaded = true;
       }
-
     }
   }
 </script>
