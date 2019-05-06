@@ -37,6 +37,7 @@
     @game.Getter public buildingsByType!: {[k in BuildingType]: Building[]};
     @game.State public me!: Player | null;
     @ui.Mutation public selectTile!: any;
+    @ui.Mutation public setShowingJobs!: any;
 
     private popperOptions = {
       placement: 'right',
@@ -56,7 +57,7 @@
     }
 
     public onClickJobs(): void {
-
+      this.setShowingJobs({showingJobs: true});
     }
 
     public myBuildings(buildings: Building[]): Building[] {

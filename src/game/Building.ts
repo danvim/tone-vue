@@ -6,6 +6,9 @@ export default class Building extends Thing implements BuildingInterface {
   public buildingType: BuildingType;
   public tilePosition: Axial;
   public progress: number;
+  public struct: number = 0;
+  public training: number = 0;
+  public prime: number = 0;
 
   constructor(
     playerId: number,
@@ -36,3 +39,22 @@ export const INSTANT_BUILDINGS: BuildingType[] = [
   BuildingType.SPAWN_POINT,
   BuildingType.BASE,
 ];
+
+export enum ResourceType {
+  STRUCT,
+  TRAINING,
+  PRIME,
+}
+
+export const ResourceTypeNames: {[k in ResourceType]: string} = {
+  [ResourceType.STRUCT]: 'Struct',
+  [ResourceType.TRAINING]: 'Training Data',
+  [ResourceType.PRIME]: 'Prime Data',
+};
+
+export const STORABLE_STORAGE: {[k in number]: ResourceType[]} = {
+  [BuildingType.BASE]: [ResourceType.STRUCT, ResourceType.TRAINING, ResourceType.PRIME],
+  [BuildingType.BARRACK]: [ResourceType.TRAINING],
+  [BuildingType.STRUCT_GENERATOR]: [ResourceType.STRUCT],
+  [BuildingType.TRAINING_DATA_GENERATOR]: [ResourceType.TRAINING],
+};

@@ -69,6 +69,7 @@
         </vgl-renderer>
       </div>
       <tile-panel/>
+      <jobs-panel/>
     </vgl-namespace>
   </div>
 </template>
@@ -129,6 +130,7 @@
   import SideBar from '@/components/SideBar.vue';
   import Entities from '@/components/Game/Entities.vue';
   import TilePanel from '@/components/UI/TilePanel.vue';
+  import JobsPanel from '@/components/UI/JobsPanel.vue';
   // tslint:disable-next-line
   const Popper = require('vue-popperjs');
 
@@ -139,6 +141,7 @@
 
   @Component({
     components: {
+      JobsPanel,
       TilePanel,
       Entities,
       SideBar,
@@ -184,7 +187,7 @@
       worldMap: WorldMap;
     };
 
-    public datGUI: GUI = new GUI({ name: 'Tone Vue' });
+    public datGUI: GUI;
 
     private width: number = 0;
     private height: number = 0;
@@ -259,6 +262,8 @@
     }
 
     private setupGUI(): void {
+      this.datGUI = new GUI({ name: 'Tone Vue' });
+
       const guiCameraOrbitTarget = this.datGUI.addFolder('Camera Orbit Target');
       guiCameraOrbitTarget.add(this.cameraOrbitTarget, 'x', -200, 200);
       guiCameraOrbitTarget.add(this.cameraOrbitTarget, 'y', -200, 200);
@@ -340,14 +345,14 @@
       );
 
       this.setupThreeInjection();
-      this.setupGUI();
+      // this.setupGUI();
 
       this.renderGame();
     }
 
     private destroyed(): void {
       window.removeEventListener('resize', this.updateWindowDimensions);
-      this.datGUI.destroy();
+      // this.datGUI.destroy();
       this.willRender = false;
     }
   }

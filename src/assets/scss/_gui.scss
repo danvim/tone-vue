@@ -49,6 +49,53 @@
   }
 }
 
+#jobs-panel {
+  position: absolute;
+  height: 250px;
+  width:600px;
+  min-width: 0;
+  bottom:0;
+  left:300px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 7px 15px;
+  @include dialog-color($darker-faded-blue);
+  display: flex;
+  flex-direction: column;
+
+  > .jobs-details {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+.job-row {
+  padding: 5px 10px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: row;
+
+  > .description {
+    flex: 1;
+  }
+
+  &:hover {
+    background-color: transparentize($border-color, 0.2);
+  }
+
+  &:active, &.active {
+    background-color: $border-color;
+    color: $blue;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+// Canvas
+
 .map-camera {
   position: absolute;
   bottom: 5px;
@@ -64,6 +111,11 @@
 .resources {
   display: flex;
   flex-direction: row;
+}
+
+.resource-lg {
+  font-size: 20px;
+  margin-bottom: 5px;
 }
 
 .resources > *, .resource {
@@ -146,4 +198,31 @@
 
 .center {
   margin: 0 auto;
+}
+
+
+// Jobs
+
+.jobs-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-gap: 10px;
+  margin: 0 auto;
+}
+
+
+// Scrollbar
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: $faded-blue;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
 }

@@ -5,7 +5,7 @@ import {Euler, Vector3} from 'vue-gl/node_modules/three';
 import Building from '@/game/Building';
 import Entity from '@/game/Entity';
 import {POP_ENTITIES} from '@/configs/EntityMeshDict';
-import {BuildingType, EntityType} from 'tone-core/dist/lib';
+import {BuildingType, EntityType, JobPriority} from 'tone-core/dist/lib';
 
 export const state: GameState = {
   me: null,
@@ -15,6 +15,7 @@ export const state: GameState = {
   workerPop: 0,
   totalPop: 0,
   things: {},
+  jobs: {},
 };
 
 export const mutations: GameMutation = {
@@ -79,6 +80,27 @@ export const mutations: GameMutation = {
       Vue.delete(things, uuid);
     }
   },
+  updateResourceStorage({things}, { uuid, struct, training, prime }): void {
+    if (!things.hasOwnProperty(uuid)) {
+      window.console.error(`Things does not contain uuid ${uuid}`);
+      return;
+    }
+    if (!(things[uuid] instanceof Building)) {
+      window.console.error(`Thing with uuid ${uuid} is not a building`);
+      return;
+    }
+    const t = things[uuid] as Building;
+    t.struct = struct;
+    t.training = training;
+    t.prime = prime;
+  },
+  updateJob({jobs}, { message }): void {
+    if (message.priority !== JobPriority.SUSPENDED) {
+      Vue.set(jobs, message.jobId, message);
+    } else {
+      Vue.delete(jobs, message.jobId);
+    }
+  },
 };
 
 export const actions: GameAction = {
@@ -110,6 +132,14 @@ export const actions: GameAction = {
     commit('updateHealth', {
       uuid: message.uid,
       hp: message.hp,
+    });
+  },
+  updateResourceStorage({commit}, { message }): void {
+    commit('updateResourceStorage', {
+      uuid: message.uid,
+      struct: message.struct,
+      training: message.trainingData,
+      prime: message.primeData,
     });
   },
 };

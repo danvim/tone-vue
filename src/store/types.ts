@@ -8,7 +8,7 @@ import {
   MoveEntityMessage,
   SpawnEntityMessage,
   TileMap,
-  UpdateHealthMessage,
+  UpdateHealthMessage, UpdateJobMessage, UpdateResourceStorageMessage,
 } from 'tone-core/dist/lib';
 import Thing from '@/game/Thing';
 import Building from '@/game/Building';
@@ -27,6 +27,7 @@ export interface GameState {
   workerPop: number;
   totalPop: number;
   things: {[k in string]: Thing};
+  jobs: {[k in string]: UpdateJobMessage};
 }
 
 export interface GameMutation extends MutationTree<GameState> {
@@ -44,6 +45,8 @@ export interface GameMutation extends MutationTree<GameState> {
     payload: {uuid: string, position: Axial, playerId: number, buildingType: BuildingType, progress: number},
     ): void;
   updateHealth(s: GameState, payload: {uuid: string, hp: number}): void;
+  updateResourceStorage(s: GameState, payload: {uuid: string, struct: number, training: number, prime: number}): void;
+  updateJob(s: GameState, payload: {message: UpdateJobMessage}): void;
 }
 
 type I = ActionContext<GameState, RootState>;
@@ -53,6 +56,7 @@ export interface GameAction extends ActionTree<GameState, RootState> {
   moveEntity(injectee: I, payload: {message: MoveEntityMessage}): void;
   build(injectee: I, payload: {message: BuildMessage}): void;
   updateHealth(injectee: I, payload: {message: UpdateHealthMessage}): void;
+  updateResourceStorage(injectee: I, payload: {message: UpdateResourceStorageMessage}): void;
 }
 
 export interface GameGetter extends GetterTree<GameState, RootState> {
@@ -66,8 +70,10 @@ export interface GameGetter extends GetterTree<GameState, RootState> {
 
 export interface UIState {
   selectedTile: string;
+  showingJobs: boolean;
 }
 
 export interface UIMutation extends MutationTree<UIState> {
   selectTile(s: UIState, payload: {axial: string}): void;
+  setShowingJobs(s: UIState, payload: {showingJobs: boolean}): void;
 }

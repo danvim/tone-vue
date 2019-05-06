@@ -10,17 +10,17 @@ import {BuildingType} from 'tone-core/dist/lib';
       <fragment v-if="me && building.playerId === me.playerId">
         <p v-if="buildingProgress !== 1">Progress: {{building.progress}}/{{buildingStruct}}</p>
         <div v-if="buildingProgress === 1 && isStorage">
-          <div class="resource">
+          <div class="resource resource-lg" v-if="storageTypes.includes(resourceType.STRUCT)">
             <i class="blue icon tone-struct"></i>
-            <span class="resource-text">0</span>
+            <span class="resource-text">{{building.struct}}</span>
           </div>
-          <div class="resource">
+          <div class="resource resource-lg" v-if="storageTypes.includes(resourceType.TRAINING)">
             <i class="red icon tone-training"></i>
-            <span class="resource-text">0</span>
+            <span class="resource-text">{{building.training}}</span>
           </div>
-          <div class="resource">
+          <div class="resource resource-lg" v-if="storageTypes.includes(resourceType.PRIME)">
             <i class="yellow icon tone-prime"></i>
-            <span class="resource-text">0</span>
+            <span class="resource-text">{{building.prime}}</span>
           </div>
         </div>
       </fragment>
@@ -28,10 +28,10 @@ import {BuildingType} from 'tone-core/dist/lib';
 
     <div v-else>
       <div class="build-radio">
-        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.STRUCT_GENERATOR" :class="{active: tryBuildType === buildingType.STRUCT_GENERATOR}">Struct Generator</button>
-        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.TRAINING_DATA_GENERATOR" :class="{active: tryBuildType === buildingType.TRAINING_DATA_GENERATOR}">Training Data Gen.</button>
-        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.RECLAIMATOR" :class="{active: tryBuildType === buildingType.RECLAIMATOR}">Reclaimator</button>
-        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.BARRACK" :class="{active: tryBuildType === buildingType.BARRACK}">Barrack</button>
+        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.STRUCT_GENERATOR" :class="{active: tryBuildType === buildingType.STRUCT_GENERATOR}">({{buildingProperty[buildingType.STRUCT_GENERATOR].struct}}) Struct Gen.</button>
+        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.TRAINING_DATA_GENERATOR" :class="{active: tryBuildType === buildingType.TRAINING_DATA_GENERATOR}">({{buildingProperty[buildingType.TRAINING_DATA_GENERATOR].struct}}) Training Gen.</button>
+        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.RECLAIMATOR" :class="{active: tryBuildType === buildingType.RECLAIMATOR}">({{buildingProperty[buildingType.RECLAIMATOR].struct}}) Reclaimator</button>
+        <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.BARRACK" :class="{active: tryBuildType === buildingType.BARRACK}">({{buildingProperty[buildingType.BARRACK].struct}}) Barrack</button>
       </div>
       <div class="center">
         <button type="button" class="btn btn-sm btn-blue" @click="tryBuild"><i class="tone-building"></i> Build</button>
@@ -43,7 +43,7 @@ import {BuildingType} from 'tone-core/dist/lib';
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import {namespace} from 'vuex-class';
-  import Building, {INSTANT_BUILDINGS, STORAGE_BUILDINGS} from '@/game/Building';
+  import Building, {INSTANT_BUILDINGS, ResourceType, STORABLE_STORAGE, STORAGE_BUILDINGS} from '@/game/Building';
   import {Axial, BuildingProperty, BuildingType, PackageType, TryBuildMessage} from 'tone-core/dist/lib';
   import {snakeToTitle} from '@/utils/String';
   import Player from '@/utils/Player';
@@ -59,6 +59,8 @@ import {BuildingType} from 'tone-core/dist/lib';
     public tryBuildType: BuildingType = BuildingType.STRUCT_GENERATOR;
 
     private buildingType = BuildingType;
+    private resourceType = ResourceType;
+    private buildingProperty = BuildingProperty;
 
     public tryBuild(): void {
       window.protocol.emit(PackageType.TRY_BUILD, {
@@ -104,6 +106,13 @@ import {BuildingType} from 'tone-core/dist/lib';
         return BuildingProperty[this.building.buildingType].struct;
       }
       return 1;
+    }
+
+    public get storageTypes(): ResourceType[] {
+      if (this.building === null || !this.isStorage) {
+        return [];
+      }
+      return STORABLE_STORAGE[this.building.buildingType];
     }
   }
 </script>

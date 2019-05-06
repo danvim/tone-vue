@@ -1,3 +1,5 @@
+import {PackageType} from 'tone-core/dist/lib';
+import {PackageType} from 'tone-core/dist/lib';
 <template>
   <div id="app">
     <transition name="fade" v-if="currentScreen === GameScreen.LOADING">
@@ -28,14 +30,7 @@
   import Lobby from '@/components/Lobby.vue';
   import * as THREE from 'vue-gl/node_modules/three';
   import {namespace, State} from 'vuex-class';
-  import {
-    BuildMessage,
-    MoveEntityMessage,
-    PackageType,
-    SpawnEntityMessage,
-    UpdateLobbyMessage,
-    UpdateTilesMessage,
-  } from 'tone-core/dist/lib';
+  import {PackageType, UpdateLobbyMessage, UpdateTilesMessage,} from 'tone-core/dist/lib';
   import {HOST, PEER_PATH, PORT} from '@/configs/Server';
   import axios from 'axios';
   import {GameScreen} from '@/utils/GameScreen';
@@ -60,10 +55,12 @@
     @game.Mutation public addPlayer: any;
     @game.Mutation public updateMap: any;
     @game.Mutation public setMyself: any;
+    @game.Mutation public updateJob: any;
     @game.Action public spawnEntity: any;
     @game.Action public moveEntity: any;
     @game.Action public build: any;
     @game.Action public updateHealth: any;
+    @game.Action public updateResourceStorage: any;
 
     public currentScreen: GameScreen = GameScreen.LOADING;
 
@@ -154,6 +151,14 @@
 
       protocol.on(PackageType.UPDATE_HEALTH, (message, data) => {
         this.updateHealth({message});
+      });
+
+      protocol.on(PackageType.UPDATE_RESOURCE_STORAGE, (message, data) => {
+        this.updateResourceStorage({message});
+      });
+
+      protocol.on(PackageType.UPDATE_JOB, (message, data) => {
+        this.updateJob({message});
       });
 
     }

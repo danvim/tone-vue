@@ -22,12 +22,12 @@
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
   outline: none;
 
-  &:hover {
+  &:hover:not([disabled]) {
     filter: brightness(1.2);
     box-shadow: 0 0 5px $color, 0 0 5px $color inset, 0 0 0 3px transparentize($color, 0.5) inset;
   }
 
-  &:active {
+  &:active:not([disabled]) {
     filter: brightness(1.4);
     box-shadow: 0 0 10px $color, 0 0 5px $color inset, 0 0 0 3px transparentize(lighten($color, 40), 0.5) inset;
   }
@@ -35,6 +35,10 @@
 
 .btn-blue {
   @include btn-color($blue);
+
+  &[disabled] {
+    filter: saturate(0);
+  }
 }
 
 .btn-outline {

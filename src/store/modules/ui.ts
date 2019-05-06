@@ -4,11 +4,15 @@ import {Vue} from 'vue-property-decorator';
 
 const state: UIState = {
   selectedTile: '',
+  showingJobs: false,
 };
 
 const mutations: UIMutation = {
   selectTile(s, { axial }): void {
     s.selectedTile = axial;
+  },
+  setShowingJobs(s, {showingJobs}): void {
+    s.showingJobs = showingJobs;
   },
 };
 
