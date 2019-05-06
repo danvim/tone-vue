@@ -6,9 +6,10 @@ import {BuildingType} from 'tone-core/dist/lib';
     <p>Building: {{buildingName}}</p>
 
     <div v-if="building">
-      <p>HP: {{building.hp}}/1000</p>
+      <p v-if="buildingProgress === 1">HP: {{building.hp}}/{{buildingFullHp}}</p>
       <fragment v-if="me && building.playerId === me.playerId">
-        <div v-if="isStorage">
+        <p v-if="buildingProgress !== 1">Progress: {{building.progress}}/{{buildingStruct}}</p>
+        <div v-if="buildingProgress === 1 && isStorage">
           <div class="resource">
             <i class="blue icon tone-struct"></i>
             <span class="resource-text">0</span>
@@ -42,8 +43,8 @@ import {BuildingType} from 'tone-core/dist/lib';
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import {namespace} from 'vuex-class';
-  import Building, {STORAGE_BUILDINGS} from '@/game/Building';
-  import {Axial, BuildingType, PackageType, TryBuildMessage} from 'tone-core/dist/lib';
+  import Building, {INSTANT_BUILDINGS, STORAGE_BUILDINGS} from '@/game/Building';
+  import {Axial, BuildingProperty, BuildingType, PackageType, TryBuildMessage} from 'tone-core/dist/lib';
   import {snakeToTitle} from '@/utils/String';
   import Player from '@/utils/Player';
 
@@ -80,8 +81,29 @@ import {BuildingType} from 'tone-core/dist/lib';
       return this.building ? snakeToTitle(BuildingType[this.building.buildingType]) : 'None';
     }
 
+    public get buildingFullHp(): number {
+      return this.building ? BuildingProperty[this.building.buildingType].hp: 1;
+    }
+
     public get isStorage(): boolean {
       return this.building !== null && STORAGE_BUILDINGS.includes(this.building.buildingType);
+    }
+
+    public get buildingProgress(): number {
+      if (this.building !== null && INSTANT_BUILDINGS.includes(this.building.buildingType)) {
+        return 1;
+      }
+      if (this.building !== null) {
+        return this.building.progress / this.buildingStruct;
+      }
+      return 0;
+    }
+
+    public get buildingStruct(): number {
+      if (this.building !== null) {
+        return BuildingProperty[this.building.buildingType].struct;
+      }
+      return 1;
     }
   }
 </script>

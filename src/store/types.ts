@@ -58,6 +58,7 @@ export interface GameAction extends ActionTree<GameState, RootState> {
 export interface GameGetter extends GetterTree<GameState, RootState> {
   buildingsByUuid: (state: GameState) => {[k in string]: Building};
   buildingsByAxial: (state: GameState) => {[k in string]: Building};
+  buildingsByType: (state: GameState) => {[k in number]: Building[]};
   entities: (state: GameState) => {[k in string]: Entity};
   myTotalPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;
   myWorkerPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;

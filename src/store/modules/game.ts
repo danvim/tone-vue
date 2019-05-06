@@ -5,7 +5,7 @@ import {Euler, Vector3} from 'vue-gl/node_modules/three';
 import Building from '@/game/Building';
 import Entity from '@/game/Entity';
 import {POP_ENTITIES} from '@/configs/EntityMeshDict';
-import {EntityType} from 'tone-core/dist/lib';
+import {BuildingType, EntityType} from 'tone-core/dist/lib';
 
 export const state: GameState = {
   me: null,
@@ -75,7 +75,7 @@ export const mutations: GameMutation = {
     }
     const t = things[uuid];
     t.hp = hp;
-    if (t.hp <= 0) {
+    if (!t.invincible && t.hp <= 0) {
       Vue.delete(things, uuid);
     }
   },
@@ -148,6 +148,21 @@ export const getters: GameGetter = {
       if (things[key] instanceof Building) {
         const bld = things[key] as Building;
         results[bld.tilePosition.asString] = bld;
+      }
+    });
+    return results;
+  },
+  buildingsByType: ({things}) => {
+    const results: {[k in number]: Building[]} = {};
+    Object.keys(BuildingType)
+      .filter((key: any) => !isNaN(key))
+      .forEach((k: any) => {
+      results[k] = [];
+    });
+    Object.keys(things).forEach((key) => {
+      if (things[key] instanceof Building) {
+        const bld = things[key] as Building;
+        results[bld.buildingType].push(bld);
       }
     });
     return results;

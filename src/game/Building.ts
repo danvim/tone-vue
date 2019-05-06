@@ -14,10 +14,14 @@ export default class Building extends Thing implements BuildingInterface {
     tilePosition: Axial,
     progress: number = 0,
   ) {
-    super(BuildingProperty[buildingType].struct, playerId, uuid, BUILDING_MESH_DICT[buildingType]);
+    super(BuildingProperty[buildingType].hp, playerId, uuid, BUILDING_MESH_DICT[buildingType]);
     this.buildingType = buildingType;
     this.tilePosition = tilePosition;
     this.progress = progress;
+
+    if (buildingType === BuildingType.SPAWN_POINT) {
+      this.invincible = true;
+    }
   }
 }
 
@@ -26,4 +30,9 @@ export const STORAGE_BUILDINGS: BuildingType[] = [
   BuildingType.BARRACK,
   BuildingType.STRUCT_GENERATOR,
   BuildingType.TRAINING_DATA_GENERATOR,
+];
+
+export const INSTANT_BUILDINGS: BuildingType[] = [
+  BuildingType.SPAWN_POINT,
+  BuildingType.BASE,
 ];
