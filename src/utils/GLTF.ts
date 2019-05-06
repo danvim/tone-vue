@@ -41,3 +41,10 @@ export const DEFAULT_GET_OBJECT3D = (gltf: GLTF): Object3D => {
   object3d.traverse((child) => child.castShadow = true);
   return object3d;
 };
+
+
+export const BUILDING_GET_OBJECT3D = (gltf: GLTF): Object3D => {
+  const object3d = DEFAULT_GET_OBJECT3D(gltf);
+  object3d.scale.setScalar(12);
+  return object3d;
+};

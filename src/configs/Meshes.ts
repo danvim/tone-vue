@@ -1,5 +1,5 @@
 import {Object3D, Vector3} from 'vue-gl/node_modules/three';
-import {DEFAULT_GET_OBJECT3D} from '@/utils/GLTF';
+import {BUILDING_GET_OBJECT3D, DEFAULT_GET_OBJECT3D} from '@/utils/GLTF';
 import {GLTF} from 'vue-gl/node_modules/three/examples/jsm/loaders/GLTFLoader';
 
 /**
@@ -18,11 +18,11 @@ export interface GLTFPrepInfo {
 export const GLTFS: GLTFPrepInfo[] = [
   {
     name: 'pool',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
   {
     name: 'hall',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
   {
     name: 'worker',
@@ -34,19 +34,19 @@ export const GLTFS: GLTFPrepInfo[] = [
   },
   {
     name: 'collector',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
   {
     name: 'spawn',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
   {
     name: 'barrack',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
   {
     name: 'ic',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
   {
     name: 'bullet',
@@ -54,10 +54,10 @@ export const GLTFS: GLTFPrepInfo[] = [
   },
   {
     name: 'reclaimator',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
   {
     name: 'training',
-    done: DEFAULT_GET_OBJECT3D,
+    done: BUILDING_GET_OBJECT3D,
   },
 ];

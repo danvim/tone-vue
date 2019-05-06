@@ -50,12 +50,9 @@
           if (meshLoader.objects[this.model]) {
             obj = meshLoader.objects[this.model].clone();
           } else {
-            const m = new Mesh();
-            m.geometry = new BoxGeometry(20, 20, 20);
-            m.material = new MeshPhongMaterial();
-            obj = m;
+            window.console.error(`Cannot find model ${this.model} from mesh loader instance!`);
+            return;
           }
-
 
           obj.parent = this.vglObject3d.inst;
 
@@ -68,6 +65,7 @@
           this.isLoaded = true;
         });
       } else {
+        this.selfObject = this.vglNamespace.object3ds[this.resourceName].clone();
         this.isLoaded = true;
       }
     }
