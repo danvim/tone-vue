@@ -13,3 +13,13 @@ export const ENTITY_MESH_DICT: {[k in EntityType]: string} = {
   [EntityType.BULLET_1]: 'BULLET',
   [EntityType.BULLET_2]: 'BULLET',
 };
+
+export const POP_ENTITIES: EntityType[] = [
+  EntityType.WORKER,
+  EntityType.SOLDIER_0,
+  EntityType.SOLDIER_1,
+  EntityType.SOLDIER_2,
+  EntityType.ENEMY_0,
+  EntityType.ENEMY_1,
+  EntityType.ENEMY_2,
+];

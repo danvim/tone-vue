@@ -16,6 +16,15 @@ const Tone = new MeshPhongMaterial({
     flatShading: true,
 });
 
+const Glass = new MeshPhongMaterial({
+    transparent: true,
+    opacity: 0.8,
+    color: new Color(0xffffff),
+    specular: new Color(0x2dffbe),
+    shininess: 60,
+    flatShading: true,
+});
+
 const Wall1 = new MeshPhongMaterial({
     color: new Color(0x8B8B75),
     shininess: 50,
@@ -50,6 +59,7 @@ const Materials: {[k in string]: Material} = {
     Wall1,
     AmberLamp,
     CyanLamp,
+    Glass,
 };
 
 export default Materials;

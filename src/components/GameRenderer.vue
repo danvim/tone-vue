@@ -62,7 +62,7 @@ import {PackageType} from 'tone-core/dist/lib';
             <div class="popper">
               Workers Population
             </div>
-            <div class="resource" slot="reference"><i class="yellow tone-worker"></i> <span class="resource-text">{{workerPop}}/{{totalPop}} ({{workerPercentage}})</span></div>
+            <div class="resource" slot="reference"><i class="yellow tone-worker"></i> <span class="resource-text">{{myWorkerPop}}/{{myTotalPop}} ({{workerPercentage}})</span></div>
           </popper>
         </div>
         <vgl-renderer scene="scn" camera="cmr2" antialias class="map-camera">
@@ -158,8 +158,8 @@ import {PackageType} from 'tone-core/dist/lib';
   export default class GameRenderer extends Vue {
     @game.State public map!: TileMap;
     @game.State public ic!: number;
-    @game.State public workerPop!: number;
-    @game.State public totalPop!: number;
+    @game.Getter public myWorkerPop!: number;
+    @game.Getter public myTotalPop!: number;
 
     public cameraDistance: number = 200;
     public cameraTheta: number = 0;
@@ -196,7 +196,7 @@ import {PackageType} from 'tone-core/dist/lib';
     }
 
     private get workerPercentage(): string {
-      return `${Math.round(this.workerPop / this.totalPop * 100)}%`;
+      return `${Math.round(this.myWorkerPop / this.myTotalPop * 100)}%`;
     }
 
     private onMouseMove(e: MouseEvent): void {

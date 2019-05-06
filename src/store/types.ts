@@ -7,9 +7,9 @@ import {
   EntityType,
   MoveEntityMessage,
   SpawnEntityMessage,
-  TileMap
+  TileMap,
+  UpdateHealthMessage,
 } from 'tone-core/dist/lib';
-import LocRot from '@/game/LocRot';
 import Thing from '@/game/Thing';
 import Building from '@/game/Building';
 import Entity from '@/game/Entity';
@@ -20,6 +20,7 @@ export interface RootState {
 }
 
 export interface GameState {
+  me: Player | null;
   players: Player[];
   map: TileMap;
   ic: number;
@@ -29,6 +30,7 @@ export interface GameState {
 }
 
 export interface GameMutation extends MutationTree<GameState> {
+  setMyself(state: GameState, payload: {player: Player}): void;
   addPlayer(state: GameState, payload: {player: Player}): void;
   removePlayer(state: GameState, payload: {username: string}): void;
   updateMap(s: GameState, payload: { map: TileMap}): void;
@@ -41,16 +43,22 @@ export interface GameMutation extends MutationTree<GameState> {
     s: GameState,
     payload: {uuid: string, position: Axial, playerId: number, buildingType: BuildingType, progress: number},
     ): void;
+  updateHealth(s: GameState, payload: {uuid: string, hp: number}): void;
 }
 
+type I = ActionContext<GameState, RootState>;
+
 export interface GameAction extends ActionTree<GameState, RootState> {
-  spawnEntity(injectee: ActionContext<GameState, RootState>, payload: {message: SpawnEntityMessage}): void;
-  moveEntity(injectee: ActionContext<GameState, RootState>, payload: {message: MoveEntityMessage}): void;
-  build(injectee: ActionContext<GameState, RootState>, payload: {message: BuildMessage}): void;
+  spawnEntity(injectee: I, payload: {message: SpawnEntityMessage}): void;
+  moveEntity(injectee: I, payload: {message: MoveEntityMessage}): void;
+  build(injectee: I, payload: {message: BuildMessage}): void;
+  updateHealth(injectee: I, payload: {message: UpdateHealthMessage}): void;
 }
 
 export interface GameGetter extends GetterTree<GameState, RootState> {
   buildingsByUuid: (state: GameState) => {[k in string]: Building};
   buildingsByAxial: (state: GameState) => {[k in string]: Building};
   entities: (state: GameState) => {[k in string]: Entity};
+  myTotalPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;
+  myWorkerPop: (state: GameState, getters: {entities: {[k in string]: Entity}}) => number;
 }

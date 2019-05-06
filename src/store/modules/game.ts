@@ -4,8 +4,11 @@ import {Vue} from 'vue-property-decorator';
 import {Euler, Vector3} from 'vue-gl/node_modules/three';
 import Building from '@/game/Building';
 import Entity from '@/game/Entity';
+import {POP_ENTITIES} from '@/configs/EntityMeshDict';
+import {EntityType} from 'tone-core/dist/lib';
 
 export const state: GameState = {
+  me: null,
   map: {},
   players: [],
   ic: 0,
@@ -15,6 +18,9 @@ export const state: GameState = {
 };
 
 export const mutations: GameMutation = {
+  setMyself(s: GameState, { player }): void {
+    s.me = player;
+  },
   addPlayer(s: GameState, {player}): void {
     if (s.players.filter((p) => p.playerId === player.playerId).length === 0) {
       s.players.push(player);
@@ -62,6 +68,17 @@ export const mutations: GameMutation = {
       t.progress = progress;
     }
   },
+  updateHealth({things}, { uuid, hp }): void {
+    if (!things.hasOwnProperty(uuid)) {
+      window.console.error(`Things does not contain uuid ${uuid}`);
+      return;
+    }
+    const t = things[uuid];
+    t.hp = hp;
+    if (t.hp <= 0) {
+      Vue.delete(things, uuid);
+    }
+  },
 };
 
 export const actions: GameAction = {
@@ -89,9 +106,33 @@ export const actions: GameAction = {
       progress: message.progress,
     });
   },
+  updateHealth({commit}, { message }): void {
+    commit('updateHealth', {
+      uuid: message.uid,
+      hp: message.hp,
+    });
+  },
 };
 
 export const getters: GameGetter = {
+  myTotalPop: (s, {entities}) => {
+    if (s.me !== null) {
+      return Object.keys(entities).filter((key) =>
+        entities[key].playerId === s.me!.playerId &&
+        POP_ENTITIES.includes(entities[key].entityType),
+      ).length;
+    }
+    return 1;
+  },
+  myWorkerPop: (s, {entities}) => {
+    if (s.me !== null) {
+      return Object.keys(entities).filter((key) =>
+        entities[key].playerId === s.me!.playerId &&
+        entities[key].entityType === EntityType.WORKER,
+      ).length;
+    }
+    return 1;
+  },
   buildingsByUuid: ({things}) => {
     const results: {[k in string]: Building} = {};
     Object.keys(things).forEach((key) => {

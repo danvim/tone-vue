@@ -1,5 +1,6 @@
 import {PackageType} from 'tone-core/dist/lib';
 import {PackageType} from 'tone-core/dist/lib';
+import {PackageType} from 'tone-core/dist/lib';
 import {GameScreen} from './utils/GameScreen';
 import {GameScreen} from './utils/GameScreen';
 import {PackageType} from 'tone-core/dist/lib';
@@ -65,9 +66,11 @@ import {PackageType} from 'tone-core/dist/lib';
     @State public version!: string;
     @game.Mutation public addPlayer: any;
     @game.Mutation public updateMap: any;
+    @game.Mutation public setMyself: any;
     @game.Action public spawnEntity: any;
     @game.Action public moveEntity: any;
     @game.Action public build: any;
+    @game.Action public updateHealth: any;
 
     public currentScreen: GameScreen = GameScreen.LOADING;
 
@@ -123,13 +126,17 @@ import {PackageType} from 'tone-core/dist/lib';
         if (this.currentScreen !== GameScreen.GAME && lobbyMessage.connId === window.peer.id) {
           this.currentScreen = GameScreen.LOBBY;
         }
-        this.addPlayer({
-          player: {
-            username: lobbyMessage.username,
-            playerId: lobbyMessage.playerId,
-            connId: lobbyMessage.connId,
-          },
-        });
+        const player = {
+          username: lobbyMessage.username,
+          playerId: lobbyMessage.playerId,
+          connId: lobbyMessage.connId,
+        };
+
+        this.addPlayer({player});
+
+        if (lobbyMessage.connId === window.peer.id) {
+          this.setMyself({player});
+        }
       });
 
       protocol.on(PackageType.UPDATE_TILES, (message, data) => {
@@ -141,18 +148,19 @@ import {PackageType} from 'tone-core/dist/lib';
       });
 
       protocol.on(PackageType.SPAWN_ENTITY, (message, data) => {
-        const spawnEntityMessage = message as SpawnEntityMessage;
-        this.spawnEntity({message: spawnEntityMessage});
+        this.spawnEntity({message});
       });
 
       protocol.on(PackageType.MOVE_ENTITY, (message, data) => {
-        const moveEntityMessage = message as MoveEntityMessage;
-        this.moveEntity({message: moveEntityMessage});
+        this.moveEntity({message});
       });
 
       protocol.on(PackageType.BUILD, (message, data) => {
-        const buildMessage = message as BuildMessage;
-        this.build({message: buildMessage});
+        this.build({message});
+      });
+
+      protocol.on(PackageType.UPDATE_HEALTH, (message, data) => {
+        this.updateHealth({message});
       });
 
     }

@@ -68,6 +68,8 @@
       tileMesh: VglObject3dX,
     };
 
+    private v3 = v3;
+
     /**
      * Check if this tile is selected from the broadcast object and update i
      * @param group
@@ -147,8 +149,6 @@
     public get building(): Building | undefined {
       return this.buildingsByAxial[this.axialCoords];
     }
-
-    private v3 = v3;
 
     private get resourceName(): string {
       return `tile${this.axialCoords}`;
