@@ -1,5 +1,3 @@
-import {PackageType} from 'tone-core/dist/lib';
-import {BuildingType} from 'tone-core/dist/lib';
 <template>
   <div id="tile-panel" class="panel" v-if="selectedTile !== ''">
     <h3>Tile Info</h3>
@@ -45,7 +43,7 @@ import {BuildingType} from 'tone-core/dist/lib';
       </div>
     </div>
 
-    <div v-else>
+    <div v-else-if="inTerritory">
       <div class="build-radio">
         <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.STRUCT_GENERATOR" :class="{active: tryBuildType === buildingType.STRUCT_GENERATOR}"><i class="blue icon tone-struct"></i> {{buildingProperty[buildingType.STRUCT_GENERATOR].struct}} Struct Gen.</button>
         <button type="button" class="btn btn-sm btn-outline" @click="tryBuildType = buildingType.TRAINING_DATA_GENERATOR" :class="{active: tryBuildType === buildingType.TRAINING_DATA_GENERATOR}"><i class="blue icon tone-struct"></i> {{buildingProperty[buildingType.TRAINING_DATA_GENERATOR].struct}} Training Gen.</button>
@@ -91,6 +89,7 @@ import {BuildingType} from 'tone-core/dist/lib';
     @ui.Mutation public setAttackSource: any;
     @ui.Mutation public setFightingStyle: any;
     @game.Getter public buildingsByAxial!: {[k in string]: Building};
+    @game.Getter public territoryPlayersByAxial!: {[k in string]: number[]};
     @game.State public me!: Player;
     public tryBuildType: BuildingType = BuildingType.STRUCT_GENERATOR;
 
@@ -159,6 +158,10 @@ import {BuildingType} from 'tone-core/dist/lib';
         return [];
       }
       return STORABLE_STORAGE[this.building.buildingType];
+    }
+
+    public get inTerritory(): boolean {
+      return (this.territoryPlayersByAxial[this.selectedTile] || []).includes(this.me.playerId);
     }
   }
 </script>
