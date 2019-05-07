@@ -4,7 +4,7 @@ import {
   Axial,
   BuildingType,
   BuildMessage,
-  EntityType,
+  EntityType, FightingStyle,
   MoveEntityMessage,
   SpawnEntityMessage,
   TileMap,
@@ -73,9 +73,15 @@ export interface GameGetter extends GetterTree<GameState, RootState> {
 export interface UIState {
   selectedTile: string;
   showingJobs: boolean;
+  promptTarget: boolean;
+  currentStrategy: FightingStyle;
+  attackSource: string;
 }
 
 export interface UIMutation extends MutationTree<UIState> {
   selectTile(s: UIState, payload: {axial: string}): void;
   setShowingJobs(s: UIState, payload: {showingJobs: boolean}): void;
+  setPromptTarget(s: UIState, payload: {promptTarget: boolean}): void;
+  setAttackSource(s: UIState, payload: {attackSource: string}): void;
+  setFightingStyle(s: UIState, payload: {fightingStyle: FightingStyle}): void;
 }

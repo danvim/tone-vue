@@ -1,3 +1,4 @@
+import {PackageType} from 'tone-core/dist/lib';
 <template>
   <vgl-group :position="v3(tilePosition)" :cast-shadow="true" :receive-shadow="true" name="tile" ref="group">
     <vgl-object3d :cast-shadow="true" :receive-shadow="true" name="tile-obj" ref="tileObj">
@@ -11,20 +12,21 @@
 
 <script lang="ts">
   import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
-  import {TileInfo, Axial, LEVEL_HEIGHT, TILE_SIZE} from 'tone-core/dist/lib';
+  import {Axial, FightingStyle, LEVEL_HEIGHT, PackageType, TILE_SIZE, TileInfo} from 'tone-core/dist/lib';
   import Materials from '@/assets/Materials';
   import {
     Color,
     ExtrudeGeometry,
     ExtrudeGeometryOptions,
-    Geometry, Group,
+    Geometry,
+    Group,
     MeshPhongMaterial,
     Object3D,
     Shape,
     Vector3,
   } from 'vue-gl/node_modules/three';
   import {shapeHex} from '@/utils/shapes';
-  import {VglObject3d as VglObject3dX, v3} from '@/utils/vglHelpers';
+  import {v3, VglObject3d as VglObject3dX} from '@/utils/vglHelpers';
   import {VglGroup, VglMesh, VglObject3d} from 'vue-gl';
   import {closest} from '@/utils/threeHelper';
   import Building from '@/game/Building';
@@ -61,7 +63,11 @@
     @game.Getter public buildingsByAxial!: {[k in string]: Building};
     @game.Getter public territoryPlayersByAxial!: {[k in string]: number[]};
     @ui.Mutation public selectTile: any;
-    @ui.State public selectedTile: any;
+    @ui.Mutation public setPromptTarget: any;
+    @ui.State public selectedTile!: string;
+    @ui.State public promptTarget!: boolean;
+    @ui.State public currentStrategy!: FightingStyle;
+    @ui.State public attackSource!: string;
     public hovering: boolean = false;
 
     public $refs!: {
@@ -86,6 +92,15 @@
 
     public activate(): void {
       if (this.hovering) {
+        if (this.promptTarget && this.building) {
+          // Attack this tile
+          window.protocol.emit(PackageType.TRY_SET_FIGHTING_STYLE, {
+            barrackUid: this.attackSource,
+            fightingStyle: this.currentStrategy,
+            targetUid: this.building.uuid,
+          });
+          this.setPromptTarget({promptTarget: false});
+        }
         this.selectTile({axial: this.axialCoords});
       }
     }
@@ -117,7 +132,7 @@
     }
 
     public get buildingPosition(): Vector3 {
-      return new Vector3(0, this.tileHeight, 0);
+      return new Vector3(0, this.tileHeight + 1, 0);
     }
 
     public get geometry(): Geometry {
@@ -165,7 +180,7 @@
         const ns = this.$refs.group.vglNamespace;
         const m = ns.materials[this.heightName] = Materials.Dirt.clone() as MeshPhongMaterial;
         const color = new Color(0xffffff);
-        newOwners.forEach(owner => {
+        newOwners.forEach((owner) => {
           color.multiply(ACCENTS[owner]);
         });
         m.color.set(color);

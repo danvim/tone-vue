@@ -1,10 +1,13 @@
-import {GameAction, GameGetter, GameMutation, RootState, UIMutation, UIState} from '@/store/types';
+import {RootState, UIMutation, UIState} from '@/store/types';
 import {Module} from 'vuex';
-import {Vue} from 'vue-property-decorator';
+import {FightingStyle} from 'tone-core/dist/lib';
 
 const state: UIState = {
   selectedTile: '',
   showingJobs: false,
+  promptTarget: false,
+  currentStrategy: FightingStyle.AGGRESSIVE,
+  attackSource: '',
 };
 
 const mutations: UIMutation = {
@@ -13,6 +16,15 @@ const mutations: UIMutation = {
   },
   setShowingJobs(s, {showingJobs}): void {
     s.showingJobs = showingJobs;
+  },
+  setPromptTarget(s, {promptTarget}): void {
+    s.promptTarget = promptTarget;
+  },
+  setAttackSource(s, { attackSource }): void {
+    s.attackSource = attackSource;
+  },
+  setFightingStyle(s, { fightingStyle }): void {
+    s.currentStrategy = fightingStyle;
   },
 };
 

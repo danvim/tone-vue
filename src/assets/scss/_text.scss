@@ -1,0 +1,6 @@
+@import "colors";
+
+@mixin text-glow($color: $blue) {
+  text-shadow: 0 0 10px $color;
+  color: lighten($color, 20);
+}

@@ -53,7 +53,7 @@
     }
 
     public onClickAttack(): void {
-
+      //
     }
 
     public onClickJobs(): void {
@@ -62,7 +62,7 @@
 
     public myBuildings(buildings: Building[]): Building[] {
       return buildings.filter(
-        bld => this.me !== null && bld.playerId === this.me.playerId
+        (bld) => this.me !== null && bld.playerId === this.me.playerId,
       );
     }
 

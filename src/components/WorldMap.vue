@@ -51,7 +51,7 @@
       this.$refs.tiles.forEach((tile: any) => tile.offHover());
     }
 
-    public broadcastSelect(group: Object3D): void {
+    public broadcastSelect(): void {
       this.$refs.tiles.forEach((tile: any) => {tile.activate(); });
     }
   }

@@ -1,7 +1,7 @@
 <template>
-  <fragment>
+  <vgl-group>
     <entity-c v-for="(entity, k) in entities" :entity="entity" :key="k"/>
-  </fragment>
+  </vgl-group>
 </template>
 
 <script lang="ts">

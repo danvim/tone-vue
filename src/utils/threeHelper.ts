@@ -22,6 +22,7 @@ export function findAllType(o: Object3D, type: string): Object3D[] {
 
 export function applyAccent(o: Object3D, c: Color) {
   const meshes = findAllType(o, 'Mesh') as Mesh[];
+  meshes.forEach((mesh) => mesh.material = (mesh.material as Material).clone());
   const materials = meshes
     .map((mesh) => mesh.material)
     .filter((material) =>

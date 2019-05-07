@@ -30,7 +30,7 @@ import {PackageType} from 'tone-core/dist/lib';
   import Lobby from '@/components/Lobby.vue';
   import * as THREE from 'vue-gl/node_modules/three';
   import {namespace, State} from 'vuex-class';
-  import {PackageType, UpdateLobbyMessage, UpdateTilesMessage,} from 'tone-core/dist/lib';
+  import {PackageType, UpdateLobbyMessage, UpdateTilesMessage} from 'tone-core/dist/lib';
   import {HOST, PEER_PATH, PORT} from '@/configs/Server';
   import axios from 'axios';
   import {GameScreen} from '@/utils/GameScreen';

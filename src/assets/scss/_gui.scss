@@ -1,4 +1,5 @@
 @import "colors";
+@import "text";
 
 .field-camera {
   position: absolute;
@@ -92,6 +93,13 @@
     color: $blue;
     text-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
   }
+}
+
+.barrack-choice {
+  display: grid;
+  margin: 10px auto;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 10px;
 }
 
 // Canvas
@@ -208,6 +216,39 @@
   grid-template-columns: repeat(5, auto);
   grid-gap: 10px;
   margin: 0 auto;
+}
+
+
+//Prompt Target
+
+.prompt-target {
+  z-index: 1060;
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  opacity: 0;
+  transition: 0.2s opacity ease-in-out;
+  pointer-events: none;
+  @include text-glow($red);
+  animation: glow-red 2s ease infinite;
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+@keyframes glow-red {
+  0% {
+    box-shadow: 0 0 20px $red inset;
+  }
+  50% {
+    box-shadow: 0 0 40px $red inset;
+  }
+  100% {
+    box-shadow: 0 0 20px $red inset;
+  }
 }
 
 

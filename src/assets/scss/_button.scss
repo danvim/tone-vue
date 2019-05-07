@@ -6,6 +6,10 @@
   min-width: 150px;
   border-radius: 3px;
   transition: 0.2s all ease;
+
+  &[disabled] {
+    filter: saturate(0);
+  }
 }
 
 .btn.btn-sm {
@@ -35,10 +39,14 @@
 
 .btn-blue {
   @include btn-color($blue);
+}
 
-  &[disabled] {
-    filter: saturate(0);
-  }
+.btn-red {
+  @include btn-color($red);
+}
+
+.btn-yellow {
+  @include btn-color($yellow);
 }
 
 .btn-outline {

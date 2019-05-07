@@ -70,6 +70,7 @@
       </div>
       <tile-panel/>
       <jobs-panel/>
+      <prompt-target/>
     </vgl-namespace>
   </div>
 </template>
@@ -131,6 +132,7 @@
   import Entities from '@/components/Game/Entities.vue';
   import TilePanel from '@/components/UI/TilePanel.vue';
   import JobsPanel from '@/components/UI/JobsPanel.vue';
+  import PromptTarget from '@/components/UI/PromptTarget.vue';
   // tslint:disable-next-line
   const Popper = require('vue-popperjs');
 
@@ -141,6 +143,7 @@
 
   @Component({
     components: {
+      PromptTarget,
       JobsPanel,
       TilePanel,
       Entities,
