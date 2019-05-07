@@ -48,7 +48,7 @@
 
         meshLoader.onLoad(() => {
           if (meshLoader.objects[this.model]) {
-            obj = meshLoader.objects[this.model].clone(true);
+            obj = meshLoader.objects[this.model].clone();
           } else {
             window.console.error(`Cannot find model ${this.model} from mesh loader instance!`);
             return;
@@ -65,7 +65,7 @@
           this.isLoaded = true;
         });
       } else {
-        this.selfObject = this.vglNamespace.object3ds[this.resourceName].clone(true);
+        this.selfObject = this.vglNamespace.object3ds[this.resourceName].clone();
         this.isLoaded = true;
       }
     }

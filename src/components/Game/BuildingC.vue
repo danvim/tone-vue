@@ -1,8 +1,6 @@
 <template>
   <vgl-object3d :position="v3(position)" :cast-shadow="true" :receive-shadow="true" ref="m">
     <model :model="model" :accent="accent" :cast-shadow="true" :receive-shadow="true"/>
-    <vgl-box-geometry :width="20" :height="20" :depth="20" name="buildingBox"/>
-    <vgl-mesh geometry="buildingBox" position="0, 10, 0" ref="boundingBox" :visible="false"/>
   </vgl-object3d>
 </template>
 
@@ -65,10 +63,6 @@
 
     public get offset(): number {
       return (this.progress - 1) * this.buildingHeight;
-    }
-
-    public get boxMesh(): Object3D {
-      return this.$refs.boundingBox.inst;
     }
   }
 </script>

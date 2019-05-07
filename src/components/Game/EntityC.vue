@@ -1,9 +1,5 @@
 <template>
-  <vgl-object3d>
-    <model :model="model" :accent="accent" :position="v3(entity.nextPosition)" :rotation="v3(entity.nextRotation)" :cast-shadow="true" :receive-shadow="true"/>
-    <vgl-box-geometry :width="10" :height="10" :depth="10" name="entityBox"/>
-    <vgl-mesh geometry="entityBox" :position="v3(boxPosition)" ref="boundingBox" :visible="false"/>
-  </vgl-object3d>
+  <model :model="model" :accent="accent" :position="v3(entity.nextPosition)" :rotation="v3(entity.nextRotation)" :cast-shadow="true" :receive-shadow="true"/>
 </template>
 
 <script lang="ts">
@@ -39,14 +35,6 @@
 
     public get model() {
       return ENTITY_MESH_DICT[this.entity.entityType];
-    }
-
-    public get boxPosition() {
-      return this.entity.nextPosition.clone().add(new Vector3(0, 15, 0));
-    }
-
-    public get boxMesh(): Object3D {
-      return this.$refs.boundingBox.inst;
     }
 
   }
