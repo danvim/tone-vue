@@ -30,10 +30,15 @@ import {PackageType} from 'tone-core/dist/lib';
   import Lobby from '@/components/Lobby.vue';
   import * as THREE from 'vue-gl/node_modules/three';
   import {namespace, State} from 'vuex-class';
-  import {PackageType, UpdateLobbyMessage, UpdateTilesMessage} from 'tone-core/dist/lib';
+  import {
+    PackageType,
+    UpdateLobbyMessage,
+    UpdateTilesMessage,
+  } from 'tone-core/dist/lib';
   import {HOST, PEER_PATH, PORT} from '@/configs/Server';
   import axios from 'axios';
   import {GameScreen} from '@/utils/GameScreen';
+  import {frame} from '@/utils/uiHelper';
   // @ts-ignore
   // noinspection TypeScriptUnresolvedVariable
   window.THREE = THREE;
@@ -137,28 +142,30 @@ import {PackageType} from 'tone-core/dist/lib';
         });
       });
 
+      frame.setFnArray([this.spawnEntity, this.moveEntity, this.build, this.updateHealth, this.updateResourceStorage]);
+
       protocol.on(PackageType.SPAWN_ENTITY, (message, data) => {
-        this.spawnEntity({message});
+        frame.update(this.spawnEntity, 'uid',  message);
       });
 
       protocol.on(PackageType.MOVE_ENTITY, (message, data) => {
-        this.moveEntity({message});
+        frame.update(this.moveEntity, 'uid', message);
       });
 
       protocol.on(PackageType.BUILD, (message, data) => {
-        this.build({message});
+        frame.update(this.build, 'uid', message);
       });
 
       protocol.on(PackageType.UPDATE_HEALTH, (message, data) => {
-        this.updateHealth({message});
+        frame.update(this.updateHealth, 'uid', message);
       });
 
       protocol.on(PackageType.UPDATE_RESOURCE_STORAGE, (message, data) => {
-        this.updateResourceStorage({message});
+        frame.update(this.updateResourceStorage, 'uid', message);
       });
 
       protocol.on(PackageType.UPDATE_JOB, (message, data) => {
-        this.updateJob({message});
+        frame.update(this.updateJob, 'jobId', message);
       });
 
     }

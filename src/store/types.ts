@@ -35,28 +35,28 @@ export interface GameMutation extends MutationTree<GameState> {
   addPlayer(state: GameState, payload: {player: Player}): void;
   removePlayer(state: GameState, payload: {username: string}): void;
   updateMap(s: GameState, payload: { map: TileMap}): void;
-  spawnEntity(
-    s: GameState,
-    payload: {uuid: string, position: Vector3, playerId: number, entityType: EntityType},
-    ): void;
-  moveEntity(s: GameState, payload: {uuid: string; position: Vector3, rotation: Euler}): void;
-  build(
-    s: GameState,
-    payload: {uuid: string, position: Axial, playerId: number, buildingType: BuildingType, progress: number},
-    ): void;
-  updateHealth(s: GameState, payload: {uuid: string, hp: number}): void;
-  updateResourceStorage(s: GameState, payload: {uuid: string, struct: number, training: number, prime: number}): void;
-  updateJob(s: GameState, payload: {message: UpdateJobMessage}): void;
+  spawnEntity(s: GameState, payload: {
+    messages: Array<{uuid: string, position: Vector3, playerId: number, entityType: EntityType}>,
+  }): void;
+  moveEntity(s: GameState, payload: {messages: Array<{uuid: string; position: Vector3, rotation: Euler}>}): void;
+  build(s: GameState, payload: {
+      messages: Array<{uuid: string, position: Axial, playerId: number, buildingType: BuildingType, progress: number}>,
+  }): void;
+  updateHealth(s: GameState, payload: {messages: Array<{uuid: string, hp: number}>}): void;
+  updateResourceStorage(s: GameState, payload: {
+    messages: Array<{uuid: string, struct: number, training: number, prime: number}>,
+  }): void;
+  updateJob(s: GameState, payload: {messages: UpdateJobMessage[]}): void;
 }
 
 type I = ActionContext<GameState, RootState>;
 
 export interface GameAction extends ActionTree<GameState, RootState> {
-  spawnEntity(injectee: I, payload: {message: SpawnEntityMessage}): void;
-  moveEntity(injectee: I, payload: {message: MoveEntityMessage}): void;
-  build(injectee: I, payload: {message: BuildMessage}): void;
-  updateHealth(injectee: I, payload: {message: UpdateHealthMessage}): void;
-  updateResourceStorage(injectee: I, payload: {message: UpdateResourceStorageMessage}): void;
+  spawnEntity(injectee: I, payload: {messages: SpawnEntityMessage[]}): void;
+  moveEntity(injectee: I, payload: {messages: MoveEntityMessage[]}): void;
+  build(injectee: I, payload: {messages: BuildMessage[]}): void;
+  updateHealth(injectee: I, payload: {messages: UpdateHealthMessage[]}): void;
+  updateResourceStorage(injectee: I, payload: {messages: UpdateResourceStorageMessage[]}): void;
 }
 
 export interface GameGetter extends GetterTree<GameState, RootState> {

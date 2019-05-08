@@ -39,109 +39,131 @@ export const mutations: GameMutation = {
   updateMap(s: GameState, {map}) {
     Object.keys(map).forEach((key) => Vue.set(s.map, key, map[key]));
   },
-  spawnEntity({things}, {uuid, position, playerId = -2, entityType}): void {
-    if (!things.hasOwnProperty(uuid)) {
-      Vue.set(things, uuid, new Entity(1, playerId, uuid, position, new Euler(0, 0, 0), entityType));
-    }
+  spawnEntity({things}, {messages}): void {
+    messages.forEach(({uuid, position, playerId = -2, entityType}) => {
+      if (!things.hasOwnProperty(uuid)) {
+        Vue.set(things, uuid, new Entity(1, playerId, uuid, position, new Euler(0, 0, 0), entityType));
+      }
+    });
   },
-  moveEntity({things}, {uuid, position, rotation}): void {
-    if (!things.hasOwnProperty(uuid)) {
-      window.console.error(`Things does not contain uuid ${uuid}`);
-      return;
-    }
-    if (!(things[uuid] instanceof Entity)) {
-      window.console.error(`Thing with uuid ${uuid} is not an entity`);
-      return;
-    }
-    const t = things[uuid] as Entity;
-    t.nextPosition = position;
-    t.nextRotation = rotation;
+  moveEntity({things}, {messages}): void {
+    messages.forEach(({uuid, position, rotation}) => {
+      if (!things.hasOwnProperty(uuid)) {
+        window.console.error(`Things does not contain uuid ${uuid}`);
+        return;
+      }
+      if (!(things[uuid] instanceof Entity)) {
+        window.console.error(`Thing with uuid ${uuid} is not an entity`);
+        return;
+      }
+      const t = things[uuid] as Entity;
+      t.nextPosition = position;
+      t.nextRotation = rotation;
+    });
   },
-  build({things}, {uuid, position, buildingType, playerId, progress}): void {
-    if (!things.hasOwnProperty(uuid)) {
-      Vue.set(things, uuid, new Building(playerId, uuid, buildingType, position, progress));
-    } else {
-      // progressing
+  build({things}, {messages}): void {
+    messages.forEach(({uuid, position, buildingType, playerId, progress}) => {
+      if (!things.hasOwnProperty(uuid)) {
+        Vue.set(things, uuid, new Building(playerId, uuid, buildingType, position, progress));
+      } else {
+        // progressing
+        if (!(things[uuid] instanceof Building)) {
+          window.console.error(`Thing with uuid ${uuid} is not a building`);
+          return;
+        }
+        const t = things[uuid] as Building;
+        t.progress = progress;
+      }
+    });
+  },
+  updateHealth({things}, {messages}): void {
+    messages.forEach(({ uuid, hp }) => {
+      if (!things.hasOwnProperty(uuid)) {
+        window.console.error(`Things does not contain uuid ${uuid}`);
+        return;
+      }
+      const t = things[uuid];
+      t.hp = hp;
+      if (!t.invincible && t.hp <= 0) {
+        Vue.delete(things, uuid);
+      }
+    });
+  },
+  updateResourceStorage({things}, {messages}): void {
+    messages.forEach(({ uuid, struct, training, prime }) => {
+      if (!things.hasOwnProperty(uuid)) {
+        window.console.error(`Things does not contain uuid ${uuid}`);
+        return;
+      }
       if (!(things[uuid] instanceof Building)) {
         window.console.error(`Thing with uuid ${uuid} is not a building`);
         return;
       }
       const t = things[uuid] as Building;
-      t.progress = progress;
-    }
+      t.struct = struct;
+      t.training = training;
+      t.prime = prime;
+    });
   },
-  updateHealth({things}, { uuid, hp }): void {
-    if (!things.hasOwnProperty(uuid)) {
-      window.console.error(`Things does not contain uuid ${uuid}`);
-      return;
-    }
-    const t = things[uuid];
-    t.hp = hp;
-    if (!t.invincible && t.hp <= 0) {
-      Vue.delete(things, uuid);
-    }
-  },
-  updateResourceStorage({things}, { uuid, struct, training, prime }): void {
-    if (!things.hasOwnProperty(uuid)) {
-      window.console.error(`Things does not contain uuid ${uuid}`);
-      return;
-    }
-    if (!(things[uuid] instanceof Building)) {
-      window.console.error(`Thing with uuid ${uuid} is not a building`);
-      return;
-    }
-    const t = things[uuid] as Building;
-    t.struct = struct;
-    t.training = training;
-    t.prime = prime;
-  },
-  updateJob({jobs}, { message }): void {
-    if (message.priority !== JobPriority.SUSPENDED) {
-      Vue.set(jobs, message.jobId, message);
-    } else {
-      Vue.delete(jobs, message.jobId);
-    }
+  updateJob({jobs}, { messages }): void {
+    messages.forEach((message) => {
+      if (message.priority !== JobPriority.SUSPENDED) {
+        Vue.set(jobs, message.jobId, message);
+      } else {
+        Vue.delete(jobs, message.jobId);
+      }
+    });
   },
 };
 
 export const actions: GameAction = {
-  moveEntity({commit}, {message}): void {
-    commit('moveEntity', {
-      uuid: message.uid,
-      position: new Vector3(message.location.x, message.location.y, message.location.z),
-      rotation: new Euler(message.pitch, message.yaw, 0),
-    });
+  moveEntity({commit}, {messages}): void {
+    commit('moveEntity', {messages: messages.map((message) => {
+        return {
+          uuid: message.uid,
+          position: new Vector3(message.location.x, message.location.y, message.location.z),
+          rotation: new Euler(message.pitch, message.yaw, 0),
+        };
+      })});
   },
-  spawnEntity({commit}, {message}): void {
-    commit('spawnEntity', {
-      uuid: message.uid,
-      position: new Vector3(message.position.x, message.position.y, message.position.z),
-      playerId: message.playerId,
-      entityType: message.entityType,
-    });
+  spawnEntity({commit}, {messages}): void {
+    commit('spawnEntity', {messages: messages.map((message) => {
+        return {
+          uuid: message.uid,
+          position: new Vector3(message.position.x, message.position.y, message.position.z),
+          playerId: message.playerId,
+          entityType: message.entityType,
+        };
+      })});
   },
-  build({commit}, {message}): void {
-    commit('build', {
-      uuid: message.uid,
-      position: message.axialCoords[0].toAxial(),
-      buildingType: message.buildingType,
-      playerId: message.playerId,
-      progress: message.progress,
-    });
+  build({commit}, {messages}): void {
+    commit('build', {messages: messages.map((message) => {
+        return {
+          uuid: message.uid,
+          position: message.axialCoords[0].toAxial(),
+          buildingType: message.buildingType,
+          playerId: message.playerId,
+          progress: message.progress,
+        };
+      })});
   },
-  updateHealth({commit}, { message }): void {
-    commit('updateHealth', {
-      uuid: message.uid,
-      hp: message.hp,
-    });
+  updateHealth({commit}, { messages }): void {
+    commit('updateHealth', {messages: messages.map((message) => {
+        return {
+          uuid: message.uid,
+          hp: message.hp,
+        };
+      })});
   },
-  updateResourceStorage({commit}, { message }): void {
-    commit('updateResourceStorage', {
-      uuid: message.uid,
-      struct: message.struct,
-      training: message.trainingData,
-      prime: message.primeData,
-    });
+  updateResourceStorage({commit}, { messages }): void {
+    commit('updateResourceStorage', {messages: messages.map((message) => {
+        return {
+          uuid: message.uid,
+          struct: message.struct,
+          training: message.trainingData,
+          prime: message.primeData,
+        };
+      })});
   },
 };
 

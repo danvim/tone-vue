@@ -4,7 +4,7 @@ import {PackageType} from 'tone-core/dist/lib';
     <vgl-object3d :cast-shadow="true" :receive-shadow="true" name="tile-obj" ref="tileObj">
       <vgl-mesh :geometry="resourceName" :material="heightName" :cast-shadow="true" :receive-shadow="true" name="tile-mesh" ref="tileMesh"/>
     </vgl-object3d>
-    <vgl-object3d v-if="building" :position="v3(buildingPosition)" :cast-shadow="true" :receive-shadow="true" name="building">
+    <vgl-object3d v-if="building" :position="v3(buildingPosition)" :rotation="v3(buildingRotation)" :cast-shadow="true" :receive-shadow="true" name="building">
       <building-c :building="building"/>
     </vgl-object3d>
   </vgl-group>
@@ -24,6 +24,7 @@ import {PackageType} from 'tone-core/dist/lib';
     Object3D,
     Shape,
     Vector3,
+    Euler,
   } from 'vue-gl/node_modules/three';
   import {shapeHex} from '@/utils/shapes';
   import {v3, VglObject3d as VglObject3dX} from '@/utils/vglHelpers';
@@ -33,6 +34,7 @@ import {PackageType} from 'tone-core/dist/lib';
   import {namespace} from 'vuex-class';
   import BuildingC from '@/components/Game/BuildingC.vue';
   import {ACCENTS} from '@/configs/Players';
+  import {hash} from '@/utils/uiHelper';
 
   const HEX_SHAPE: Shape = shapeHex(TILE_SIZE);
   const DEFAULT_EXTRUSION_OPTIONS: ExtrudeGeometryOptions = {
@@ -133,6 +135,10 @@ import {PackageType} from 'tone-core/dist/lib';
 
     public get buildingPosition(): Vector3 {
       return new Vector3(0, this.tileHeight + 1, 0);
+    }
+
+    public get buildingRotation(): Euler {
+      return new Euler(0, hash('location' + this.axialCoords) % 6283 / 1000, 0);
     }
 
     public get geometry(): Geometry {

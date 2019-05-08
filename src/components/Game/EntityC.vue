@@ -1,5 +1,5 @@
 <template>
-  <model :model="model" :accent="accent" :position="v3(entity.nextPosition)" :rotation="v3(entity.nextRotation)" :cast-shadow="true" :receive-shadow="true"/>
+  <model :model="model" :accent="accent" :position="v3(position)" :rotation="v3(entity.nextRotation)" :cast-shadow="true" :receive-shadow="true"/>
 </template>
 
 <script lang="ts">
@@ -11,6 +11,10 @@
   import Entity from '@/game/Entity';
   import {ENTITY_MESH_DICT} from '@/configs/EntityMeshDict';
   import {Vector3, Object3D} from 'vue-gl/node_modules/three';
+  import {EntityType} from 'tone-core/dist/lib';
+
+  const offsetModels: EntityType[] = [EntityType.WORKER, EntityType.SOLDIER_0, EntityType.BULLET_0];
+  const offset: number[] = [5, 9, 12];
 
   @Component({
     components: {
@@ -35,6 +39,15 @@
 
     public get model() {
       return ENTITY_MESH_DICT[this.entity.entityType];
+    }
+
+    public get position() {
+      const i = offsetModels.indexOf(this.entity.entityType);
+      if (i > -1) {
+        return this.entity.nextPosition.clone().add(new Vector3(0, offset[i], 0));
+      } else {
+        return this.entity.nextPosition;
+      }
     }
 
   }
