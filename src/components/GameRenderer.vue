@@ -93,6 +93,8 @@
     Spherical,
     Vector2,
     Vector3,
+    Ray,
+    Plane,
   } from 'vue-gl/node_modules/three';
   import {
     s3,
@@ -304,14 +306,15 @@
       dirLight.castShadow = true;
       dirLight.shadow.mapSize.width = 2048;
       dirLight.shadow.mapSize.height = 2048;
-      const d = 50;
+      const d = 100;
       dirLight.shadow.camera.left = - d;
       dirLight.shadow.camera.right = d;
       dirLight.shadow.camera.top = d;
       dirLight.shadow.camera.bottom = - d;
-      dirLight.shadow.camera.far = 3500;
+      dirLight.shadow.camera.far = 3000;
       dirLight.shadow.bias = -0.0001;
       dirLight.layers.set(G_LIGHTS_LAYER);
+      scene.add(dirLight.target);
 
       const hemisphereLight: HemisphereLight = this.$refs.hemisphereLight.inst as HemisphereLight;
       hemisphereLight.layers.set(G_LIGHTS_LAYER);
@@ -326,6 +329,22 @@
       const miniMap: OrthographicCamera = this.$refs.miniMapCamera.inst as OrthographicCamera;
       miniMap.layers.set(GAME_LAYER);
       miniMap.layers.enable(M_LIGHT_LAYER);
+
+      const ray = new Ray();
+      const groundPlane = new Plane(new Vector3(0, 1, 0));
+
+      const updateDirectionalLightPosition = () => {
+        const lookingAt = new Vector3(0, 0, -1).applyQuaternion(mainCamera.quaternion);
+        let intersection: Vector3 = new Vector3();
+        ray.set(mainCamera.position, lookingAt);
+        ray.intersectPlane(groundPlane, intersection);
+        const t = intersection.clone().add(new Vector3(3, 28.5, 6).multiplyScalar(5));
+        dirLight.position.set(t.x, t.y, t.z);
+        dirLight.target.position.set(intersection.x, intersection.y, intersection.z);
+        requestAnimationFrame(updateDirectionalLightPosition);
+      };
+
+      updateDirectionalLightPosition();
     }
 
     private renderGame() {
