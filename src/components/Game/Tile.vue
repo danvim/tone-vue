@@ -130,7 +130,7 @@ import {PackageType} from 'tone-core/dist/lib';
     }
 
     public get tileHeight(): number {
-      return (this.tileInfo.height || 0) * LEVEL_HEIGHT;
+      return (this.tileInfo.height + 2) * (LEVEL_HEIGHT);
     }
 
     public get buildingPosition(): Vector3 {

@@ -335,7 +335,7 @@
 
       const updateDirectionalLightPosition = () => {
         const lookingAt = new Vector3(0, 0, -1).applyQuaternion(mainCamera.quaternion);
-        let intersection: Vector3 = new Vector3();
+        const intersection: Vector3 = new Vector3();
         ray.set(mainCamera.position, lookingAt);
         ray.intersectPlane(groundPlane, intersection);
         const t = intersection.clone().add(new Vector3(3, 28.5, 6).multiplyScalar(5));

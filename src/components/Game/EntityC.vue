@@ -14,7 +14,7 @@
   import {EntityType} from 'tone-core/dist/lib';
 
   const offsetModels: EntityType[] = [EntityType.WORKER, EntityType.SOLDIER_0, EntityType.BULLET_0];
-  const offset: number[] = [5, 9, 12];
+  const offset: number[] = [15, 19, 23];
 
   @Component({
     components: {

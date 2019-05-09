@@ -1,6 +1,7 @@
 import {EntityType} from 'tone-core/dist/lib';
 
 export const ENTITY_MESH_DICT: {[k in EntityType]: string} = {
+  [EntityType.EMPTY]: '',
   [EntityType.WORKER]: 'WORKER',
   [EntityType.SOLDIER_0]: 'SENTINEL',
   [EntityType.SOLDIER_1]: 'SENTINEL',
