@@ -138,8 +138,6 @@
   // tslint:disable-next-line
   const Popper = require('vue-popperjs');
 
-  const connections = namespace('connections');
-
   const game = namespace('game');
   const ui = namespace('ui');
 
@@ -178,7 +176,6 @@
     public cameraPhi: number = Math.PI / 4;
     public cameraOrbitTarget: Vector3 = new Vector3(0, 0, 0);
     public raycaster = new Raycaster();
-    public mousePos = new Vector2();
     public intersecting: boolean = false;
 
     public $refs!: {
@@ -218,6 +215,7 @@
       mousePos.y = - (e.clientY / window.innerHeight) * 2 + 1;
 
       if (e.buttons === 4 && e.shiftKey) {
+        // Pan viewport
         const moveV = new Vector3(-e.movementX, 0, -e.movementY);
         this.cameraOrbitTarget.add(
           moveV
@@ -228,6 +226,7 @@
             .multiplyScalar(moveV.length() * panningFactor * this.cameraDistance),
         );
       } else if (e.buttons === 4) {
+        // Rotate viewport
         this.cameraTheta -= e.movementX * rotatingFactor;
         this.cameraPhi = Math.min(
           Math.max(pitchMin, this.cameraPhi - e.movementY * rotatingFactor),
@@ -235,9 +234,8 @@
         );
       }
 
-      // Test ray casting
+      // Hover interaction
       this.raycaster.setFromCamera(mousePos, this.$refs.mainCamera.inst);
-      // const intersects: Intersection[] = this.raycaster.intersectObjects(this.$refs.renderer.sceneInst.children, true);
       const intersects: Intersection[] = this.raycaster.intersectObjects((this.$refs.worldMap as any).tileMeshes);
 
       (this.$refs.worldMap as any).broadcastOffHover();
@@ -251,6 +249,7 @@
 
     private onClick(): void {
       (this.$refs.worldMap as any).broadcastSelect();
+      // Deselect tile if mouse is not hovering any tiles.
       if (!this.intersecting) {
         this.selectTile({axial: ''});
       }
